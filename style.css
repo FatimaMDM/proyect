@@ -11,6 +11,7 @@
 body {
     font-family: 'Poppins', sans-serif;
     overflow-x: hidden;
+    background-color: #eeece7;
 }
 
 .container {
@@ -25,6 +26,7 @@ body {
     right: 0;
     z-index: -1;
     width: 650px;
+     filter: invert(47%) sepia(5%) saturate(769%) hue-rotate(80deg) brightness(83%) contrast(59%);
 }
 
 .bg-2 {
@@ -33,6 +35,7 @@ body {
     left: 0;
     z-index: -1;
     width: 500px;
+    filter: invert(47%) sepia(10%) saturate(669%) hue-rotate(90deg) brightness(93%) contrast(59%);
 }
 
 .sp {
@@ -122,12 +125,12 @@ body {
 .btn-1 {
     display: inline-block;
     padding: 13px 30px;
-    background-color: #ff9f0d;
+    background-color: #3A5A40;
     color: #ffffff;
     border-radius: 25px;
     font-size: 16px;
     font-weight: 700;
-    box-shadow: 0 0 20px rgba(255, 159, 13, 0.4);
+    box-shadow: 0 0 20px rgba(13, 255, 82, 0.4);
 }
 
 /* INFORMACION */
@@ -193,7 +196,7 @@ body {
 
 .nosotros-txt span {
     font-size: 16px;
-    color: #ff9f0d;
+    color: #3A5A40;
     font-weight: 700;
 }
 
@@ -267,7 +270,7 @@ body {
 .product .span {
     font-size: 18px;
     font-weight: 700;
-    color: #ff9f0d;
+    color: #3A5A40;
     display: block;
     margin-bottom: 15px;
 }
