@@ -8,6 +8,20 @@
     list-style: none;
 }
 
+/* Limita el tamaño del logo en el menú */
+.menu .logo img {
+    height: 60px; /* Tamaño ideal para que no empuje el menú */
+    width: auto;  /* Mantiene la proporción original */
+    object-fit: contain;
+}
+
+/* Alineación limpia del menú */
+.menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 body {
     font-family: 'Poppins', sans-serif;
     overflow-x: hidden;
@@ -61,9 +75,10 @@ body {
 }
 
 .logo {
-    color: #303030;
-    font-size: 25px;
-    font-weight: 800;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
 }
 
 .menu .navbar ul {
@@ -181,7 +196,7 @@ body {
 }
 
 .nosotros-img {
-    width: 45%;
+    width: 48%;
     text-align: center;
 }
 
