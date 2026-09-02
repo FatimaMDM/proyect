@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verde vida</title>
+    <title>Verde Vida - Tienda de Plantas</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,19 +15,38 @@
         <div class="menu container">
             <a href="#" class="logo">
                 <img src="images/logo.ico" alt="Verde Vida">
-            </a>           
+            </a>            
+            
+            <nav class="navbar">
+                <ul>
+                    <li><a href="#" onclick="showSection('home')">Inicio</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#productos">Productos</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+
+            <!-- Acciones de Búsqueda, Wishlist, Carrito y Usuario -->
+            <div class="header-actions">
+                <input type="text" id="search-input" placeholder="Buscar planta..." class="search-input">
+                
+                <div class="wishlist-btn" id="wishlist-icon" title="Favoritos">
+                    ❤️ <span id="wishlist-count">0</span>
+                </div>
+
+                <div class="cart-btn" id="cart-icon" title="Ver Carrito">
+                    🛒 <span id="cart-count">0</span>
+                </div>
+
+                <div class="user-action" id="user-action-container">
+                    <button type="button" class="btn-auth-nav" id="open-auth-btn">Iniciar Sesión</button>
+                </div>
+            </div>
+
             <input type="checkbox" id="menu" />
             <label for="menu">
                 <img src="images/menu.png" class="menu-icono" alt="">
             </label>
-            <nav class="navbar">
-                <ul>
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Servicios</a></li>
-                    <li><a href="#">Productos</a></li>
-                    <li><a href="#">Contacto</a></li>
-                </ul>
-            </nav>
         </div>
 
         <div class="header-content container">
@@ -37,11 +56,9 @@
                     Descubre nuestra colección de plantas de interior, 
                     flores frescas y accesorios para transformar tu hogar en un oasis natural.
                 </p>
-                <a href="#" class="btn-1">Informacion</a>
+                <a href="#productos" class="btn-1">Explorar Catálogo</a>
             </div>
-            <div class="header-img">
-                <img src="images/bg-1.png" alt="">
-            </div>
+           
         </div>
         
     </header>
@@ -49,7 +66,6 @@
     <img class="sp" src="images/bg-2.svg" alt="">
 
     <section class="info container">
-
         <div class="info-1">
             <img src="images/time.svg" alt="">
             <h3>Horario de atención</h3>
@@ -69,101 +85,74 @@
             <h3>Teléfono</h3>
             <p>4846461616</p>
         </div>
-
     </section>
 
-    <section class="nosotros">
-
+    <section class="nosotros" id="nosotros">
         <img class="bg-2" src="images/bg-2.svg" alt="">
-
         <div class="nosotros-info container">
             <div class="nosotros-img">
-                <img src="images/flor.png" alt="">
+                <img src="images/flor.png" alt="Flores Selección">
             </div>
             <div class="nosotros-txt">
-                <span>Nosotros</span>
+                <span>Nosotros Verde Vida</span>
                 <h2>Selección y calidad garantizada</h2>
                 <p>
                     En Verde Vida elegimos cuidadosamente cada variedad de planta y flor 
                     para entregarte ejemplares sanos, fuertes y listos para llenar de frescura cualquier espacio.
                 </p>
-                <a href="#" class="btn-1">Informacion</a>
+                <a href="#contacto" class="btn-1">Contáctanos</a>
             </div>
         </div>
-
     </section>
 
-    <main class="products container">
-
+    <!-- SECCIÓN DE PRODUCTOS CON FILTROS COMBINADOS -->
+    <main class="products container" id="productos">
         <h2>Nuestras Plantas y Flores</h2>
-        <p>
-            Encuentra ejemplares seleccionados de alta 
-            calidad para darle frescura y elegancia a tu hogar u oficina.
-        </p>
+        <p>Encuentra ejemplares seleccionados para darle frescura y elegancia a tu hogar u oficina.</p>
 
-        <!-- Contenedor Flexgrid para los platillos -->
-        <div class="product-content">
-
-            <div class="product">
-                <img src="images/monstera deliciosa.jpg" alt="">
-                <h3>Monstera Deliciosa</h3>
-                <p>Conocida como Costilla de Adán, destaca por sus imponentes hojas caladas.</p>
-                <p>Mediana de 68 x 25.4cm</p>
-                <span class="span">$397.00</span>
-                <a href="#" class="btn-1">Agregar</a>
+        <!-- Filtros Dinámicos -->
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label for="category-filter">Categoría:</label>
+                <select id="category-filter">
+                    <option value="all">Todas las Categorías</option>
+                    <option value="interior">Plantas de Interior</option>
+                    <option value="exterior">Plantas de Exterior y Árboles</option>
+                    <option value="flores">Flores</option>
+                    <option value="suculentas">Suculentas y Cactus</option>
+                    <option value="macetas">Macetas</option>
+                    <option value="semillas">Semillas</option>
+                    <option value="accesorios">Sustratos y Herramientas</option>
+                </select>
             </div>
 
-            <div class="product">
-                <img src="images/ficus.png" alt="">
-                <h3>Ficus Lyrata</h3>
-                <p>Higuera de hoja de violín, ideal para aportar estructura y elegancia en interiores. 66cm x 20.32cm</p>
-                <span class="span">$425.00</span>
-                <a href="#" class="btn-1">Agregar</a>
+            <div class="filter-group">
+                <label for="price-range">Precio Max: $<span id="price-val">1000</span></label>
+                <input type="range" id="price-range" min="50" max="1000" step="10" value="1000">
             </div>
 
-            <div class="product">
-                <img src="images/pothos.png" alt="">
-                <h3>Pothos (Teléfono)</h3>
-                <p>Planta colgante o trepadora de hojas acorazonadas y muy fácil cuidado. 25cm x 13cm</p>
-                <span class="span">$120.00</span>
-                <a href="#" class="btn-1">Agregar</a>
+            <div class="filter-group">
+                <label for="sort-select">Ordenar por:</label>
+                <select id="sort-select">
+                    <option value="default">Destacados</option>
+                    <option value="low-high">Precio: Menor a Mayor</option>
+                    <option value="high-low">Precio: Mayor a Menor</option>
+                </select>
             </div>
-
-            <div class="product">
-                <img src="images/sanseveria.png" alt="">
-                <h3>Sansevieria</h3>
-                <p>Conocida como Lengua de Suegra, excelente purificadora de aire y muy resistente.</p>
-                <span class="span">$140.00</span>
-                <a href="#" class="btn-1">Agregar</a>
-            </div>
-
-            <div class="product">
-                <img src="images/hortencias.png" alt="">
-                <h3>Hortensias</h3>
-                <p>Flores de volumen vibrante y tonos intensos, perfectas para centro de mesa o regalo.</p>
-                <span class="span">$320.00</span>
-                <a href="#" class="btn-1">Agregar</a>
-            </div>
-
-            <div class="product">
-                <img src="images/suculentas.png" alt="">
-                <h3>Suculenta</h3>
-                <p>Detalle compacto y moderno, ideal para escritorios y repisas.</p>
-                <span class="span">$70.00</span>
-                <a href="#" class="btn-1">Agregar</a>
-            </div>
-
         </div>
 
+        <!-- Contenedor Dinámico de Productos -->
+        <div class="product-content" id="product-list">
+            <!-- Renderizado dinámico vía JS -->
+        </div>
     </main>
 
     <hr>
 
-    <footer class="footer container">
-
+    <footer class="footer container" id="contacto">
         <div class="footer-links">
             <div class="link">
-                <h3>Logo</h3>
+                <h3>Verde Vida</h3>
                 <div class="socials">
                     <img src="images/s1.svg" alt="">
                     <img src="images/s2.svg" alt="">
@@ -173,31 +162,205 @@
             </div>
 
             <div class="link">
-                <h3>Lorem</h3>
-                <a href="#">Lorem ipsum</a>
-                <a href="#">Lorem ipsum</a>
-                <a href="#">Lorem ipsum</a>
-                <a href="#">Lorem ipsum</a>
+                <h3>Servicios</h3>
+                <a href="#">Asesoría Botánica</a>
+                <a href="#">Mantenimiento</a>
+                <a href="#">Diseño de Espacios</a>
             </div>
 
             <div class="link">
-                <h3>Lorem</h3>
-                <a href="#">Lorem ipsum</a>
-                <a href="#">Lorem ipsum</a>
-                <a href="#">Lorem ipsum</a>
-                <a href="#">Lorem ipsum</a>
+                <h3>Políticas</h3>
+                <a href="#">Términos y Condiciones</a>
+                <a href="#">Políticas de Envío</a>
+                <a href="#">Devoluciones</a>
             </div>
 
             <div class="link">
-                <h3>Lorem</h3>
-                <a href="#">Lorem ipsum</a>
-                <a href="#">Lorem ipsum</a>
-                <a href="#">Lorem ipsum</a>
-                <a href="#">Lorem ipsum</a>
+                <h3>Contacto</h3>
+                <a href="#">Soporte Técnico</a>
+                <a href="#">Preguntas Frecuentes</a>
+                <a href="#">WhatsApp Directo</a>
             </div>
         </div>
-
     </footer>
 
+    <!-- MODAL CARRITO LATERAL (DRAWER) -->
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <span class="close-btn" id="close-cart">&times;</span>
+            <h2>Tu Carrito 🛒</h2>
+            <div id="cart-items" class="cart-items-body"></div>
+            
+            <div class="cart-summary">
+                <div class="summary-line"><span>Subtotal:</span> $<span id="cart-subtotal">0.00</span></div>
+                <div class="summary-line" id="discount-line" style="display:none; color: #27ae60;">
+                    <span>Descuento:</span> -$<span id="cart-discount">0.00</span>
+                </div>
+                <div class="cart-total">Total: $<span id="total-price">0.00</span></div>
+            </div>
+
+            <button type="button" class="btn-1" id="go-to-checkout-btn" style="width:100%; margin-top:15px;">Proceder al Pago</button>
+        </div>
+    </div>
+
+    <!-- MODAL FAVORITOS LATERAL (WISHLIST DRAWER) -->
+    <div class="cart-modal" id="wishlist-modal">
+        <div class="cart-content">
+            <span class="close-btn" id="close-wishlist">&times;</span>
+            <h2>Mis Favoritos ❤️</h2>
+            <div id="wishlist-items" class="cart-items-body"></div>
+        </div>
+    </div>
+
+    <!-- MODAL VISTA PREVIA RÁPIDA (QUICK VIEW) -->
+    <div class="modal-overlay" id="quickview-modal">
+        <div class="modal-card">
+            <span class="close-modal" id="close-quickview">&times;</span>
+            <div class="quickview-body" id="quickview-content"></div>
+        </div>
+    </div>
+
+    <!-- MODAL AUTENTICACIÓN (LOGIN / REGISTRO) -->
+    <div class="modal-overlay" id="auth-modal">
+        <div class="modal-card auth-card">
+            <span class="close-modal" id="close-auth">&times;</span>
+            <div class="auth-tabs">
+                <button type="button" class="tab-btn active" id="tab-login-btn">Iniciar Sesión</button>
+                <button type="button" class="tab-btn" id="tab-signup-btn">Registrarse</button>
+            </div>
+
+            <form id="login-form" class="auth-form active-form">
+                <h3>Bienvenido de Nuevo</h3>
+                <div class="form-group">
+                    <label>Correo Electrónico:</label>
+                    <input type="email" id="login-email" placeholder="tu@correo.com" required>
+                    <small class="error-msg" id="login-email-err"></small>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="login-password" placeholder="******" required>
+                    <small class="error-msg" id="login-pass-err"></small>
+                </div>
+                <button type="submit" class="btn-1" style="width:100%;">Ingresar</button>
+            </form>
+
+            <form id="signup-form" class="auth-form">
+                <h3>Crear Cuenta</h3>
+                <div class="form-group">
+                    <label>Nombre Completo:</label>
+                    <input type="text" id="signup-name" placeholder="Juan Pérez" required>
+                </div>
+                <div class="form-group">
+                    <label>Correo Electrónico:</label>
+                    <input type="email" id="signup-email" placeholder="tu@correo.com" required>
+                    <small class="error-msg" id="signup-email-err"></small>
+                </div>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="signup-password" placeholder="Mínimo 6 caracteres" required>
+                    <div class="strength-bar"><div id="strength-level"></div></div>
+                    <small id="strength-text" style="font-size:11px; color:#666;"></small>
+                </div>
+                <div class="form-group">
+                    <label>Confirmar Contraseña:</label>
+                    <input type="password" id="signup-confirm-password" placeholder="Repite contraseña" required>
+                    <small class="error-msg" id="signup-confirm-err"></small>
+                </div>
+                <button type="submit" class="btn-1" style="width:100%;">Registrarme</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL MULTI-STEP CHECKOUT Y CALCULADORA DE ENVÍOS -->
+    <div class="modal-overlay" id="checkout-modal">
+        <div class="modal-card checkout-card">
+            <span class="close-modal" id="close-checkout">&times;</span>
+            <h2>Proceso de Compra</h2>
+
+            <div class="checkout-steps">
+                <span class="step-badge active" id="step1-indicator">1. Envío</span> &rarr;
+                <span class="step-badge" id="step2-indicator">2. Pago y Confirmación</span>
+            </div>
+
+            <form id="checkout-step1" class="checkout-step active-step">
+                <h3>Dirección de Envío</h3>
+                <div class="form-group">
+                    <label>Dirección Completa:</label>
+                    <input type="text" id="chk-address" placeholder="Calle, Número, Colonia" required>
+                </div>
+                <div class="form-group">
+                    <label>Código Postal (Prueba 66400, 01000):</label>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" id="chk-zip" placeholder="CP (Ej: 66400)" required>
+                        <button type="button" class="btn-secondary" id="calc-shipping-btn">Calcular Envío</button>
+                    </div>
+                    <small id="shipping-result-msg" style="color:#3A5A40; font-weight:600; display:block; margin-top:5px;"></small>
+                </div>
+
+                <h3>Cupón de Descuento</h3>
+                <div class="form-group" style="display:flex; gap:10px;">
+                    <input type="text" id="coupon-code" placeholder="Ingresa 'PROFE100'">
+                    <button type="button" class="btn-secondary" id="apply-coupon-btn">Aplicar</button>
+                </div>
+                <small id="coupon-msg" style="display:block; margin-bottom:15px;"></small>
+
+                <button type="button" class="btn-1" id="next-to-step2" style="width:100%;">Continuar al Pago</button>
+            </form>
+
+            <form id="checkout-step2" class="checkout-step">
+                <h3>Método de Pago</h3>
+                <div class="form-group">
+                    <label>Forma de Pago:</label>
+                    <select id="payment-method">
+                        <option value="card">Tarjeta de Crédito / Débito</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="transfer">Transferencia Bancaria</option>
+                    </select>
+                </div>
+                <div id="card-fields">
+                    <div class="form-group">
+                        <label>Número de Tarjeta:</label>
+                        <input type="text" id="card-number" placeholder="4532 0000 0000 0000" maxlength="16">
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <div class="form-group" style="flex:1;">
+                            <label>Vencimiento:</label>
+                            <input type="text" id="card-exp" placeholder="MM/AA" maxlength="5">
+                        </div>
+                        <div class="form-group" style="flex:1;">
+                            <label>CVV:</label>
+                            <input type="text" id="card-cvv" placeholder="123" maxlength="4">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-final-summary">
+                    <p>Total a pagar con Envío: <strong>$<span id="final-total-checkout">0.00</span></strong></p>
+                </div>
+
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button type="button" class="btn-secondary" id="back-to-step1" style="flex:1;">Atrás</button>
+                    <button type="submit" class="btn-1" id="confirm-payment-btn" style="flex:2;">
+                        <span id="btn-text">Confirmar Pago</span>
+                        <span id="btn-spinner" class="spinner" style="display:none;"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIRMACIÓN -->
+    <div class="modal-overlay" id="thankyou-modal">
+        <div class="modal-card" style="text-align:center;">
+            <div style="font-size:50px;">🎉</div>
+            <h2 style="color:#3A5A40; margin-bottom:10px;">¡Gracias por tu Compra!</h2>
+            <p>Tu pedido ha sido procesado exitosamente.</p>
+            <p style="font-size:18px; margin:15px 0;">Número de Orden: <strong id="order-number-display" style="color:#3A5A40;">ORD-00000</strong></p>
+            <p style="font-size:14px; color:#555;">Se ha enviado un correo con el resumen detallado de tu envío.</p>
+            <button type="button" class="btn-1" id="close-thankyou-btn" style="margin-top:20px;">Volver a la Tienda</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
