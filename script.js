@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stock: 4,
         desc: "Aporta un toque tropical e imponente a jardines de sol directo.",
         spec: "Maceta de 10 litros / 1.5m altura",
-        img: "images/palmera.jpg"
+        img: "images/palmera.png"
     },
     {
         id: 9,
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stock: 15,
         desc: "Arbusto aromático y medicinal, de sol directo y bajo consumo de agua.",
         spec: "Maceta de 18cm",
-        img: "images/romero.jpg"
+        img: "images/romero.png"
     },
 
     // --- FLORES Y JARDÍN ---
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stock: 9,
         desc: "Clásico rosal de exterior con floración abundante durante primavera y verano.",
         spec: "Maceta de 25cm",
-        img: "images/rosal.jpg"
+        img: "images/rosal.png"
     },
     {
         id: 11,
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stock: 18,
         desc: "Planta de exterior súper resistente, de florecimiento continuo e intenso.",
         spec: "Maceta de 20cm",
-        img: "images/geranios.jpg"
+        img: "images/geranios.png"
     },
 
     // --- SUCULENTAS Y CACTUS ---
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stock: 7,
         desc: "Cactus vertical estilizado, perfecto para paisajismo moderno y bajo riego.",
         spec: "Maceta de 30cm / Altura 50cm",
-        img: "images/cactus.jpg"
+        img: "images/cactus.png"
     },
 
     // --- MACETAS Y CONTENEDORES ---
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stock: 10,
         desc: "Maceta de barro cocido con acabo esmaltado, incluye plato de drenaje.",
         spec: "25cm x 25cm",
-        img: "images/maceta-ceramica.jpg"
+        img: "images/maceta-ceramica.png"
     },
     {
         id: 14,
@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stock: 14,
         desc: "Ideal para helechos y plantas trepadoras, excelente retención de humedad.",
         spec: "Diámetro 30cm",
-        img: "images/maceta-colgante.jpg"
+        img: "images/maceta-colgante.png"
     },
 
     // --- SEMILLAS Y ACCESORIOS ---
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stock: 25,
         desc: "Incluye sobres de Menta, Albahaca, Cilantro y Perejil con guía de siembra.",
         spec: " Pack de 4 sobres",
-        img: "images/semillas-aromaticas.jpg"
+        img: "images/semillas-aromaticas.png"
     },
     {
         id: 16,
@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stock: 30,
         desc: "Semillas de germinación rápida para cultivar girasoles de hasta 2 metros.",
         spec: "Sobre de 50g",
-        img: "images/semillas-girasol.jpg"
+        img: "images/semillas-girasol.png"
     },
     {
         id: 17,
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stock: 40,
         desc: "Mezcla balanceada de tierra de hoja, humus de lombriz y perlita para drenaje.",
         spec: "Bolsa de 5kg",
-        img: "images/sustrato.jpg"
+        img: "images/sustrato.png"
     },
     {
         id: 18,
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stock: 8,
         desc: "Incluye pala, trasplantador, rastrillo de mano y tijeras de podar ergonómicas.",
         spec: "Set de 4 piezas con estuche",
-        img: "images/herramientas.jpg"
+        img: "images/herramientas.png"
     },
     // --- NUEVA SUCULENTA / CACTUS ---
     {
@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stock: 18,
         desc: "Conocida como Rosa de Alabastro, destaca por sus rosetas de hojas azuladas.",
         spec: "Maceta de 12cm",
-        img: "images/echeveria.jpg"
+        img: "images/echeveria.png"
     },
 
     // --- NUEVA MACETA ---
@@ -255,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stock: 12,
         desc: "Sistema con indicador de nivel de agua que facilita el cuidado prolongado.",
         spec: "Mediana de 22cm x 20cm",
-        img: "images/maceta-autoriego.jpg"
+        img: "images/maceta-autoriego.png"
     },
 
     // --- NUEVAS SEMILLAS ---
@@ -268,8 +268,8 @@ document.addEventListener('DOMContentLoaded', () => {
         discount: "16% OFF",
         stock: 22,
         desc: "Variedad de alta germinación para cultivar hermosas plantas aromáticas y de color violeta.",
-        spec: "Sobre de 100 semillas",
-        img: "images/semillas-lavanda.jpg"
+        spec: "Sobre de 500 semillas",
+        img: "images/semillas-lavanda.png"
     },
 
     // --- NUEVO SUSTRATO ---
@@ -282,8 +282,8 @@ document.addEventListener('DOMContentLoaded', () => {
         discount: null,
         stock: 35,
         desc: "Abono 100% natural rico en nutrientes para revitalizar el suelo de tus plantas.",
-        spec: "Bolsa de 3kg",
-        img: "images/humus-lombriz.jpg"
+        spec: "Bolsa de 5kg",
+        img: "images/humus-lombriz.png"
     },
 
     // --- NUEVA HERRAMIENTA ---
@@ -297,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stock: 9,
         desc: "Regadera de acero galvanizado con boquilla rociadora desmontable y acabado elegante.",
         spec: "Capacidad de 1.8 Litros",
-        img: "images/regadera-vintage.jpg"
+        img: "images/regadera-vintage.png"
     },
 
     // --- NUEVAS PLANTAS DE EXTERIOR Y ÁRBOLES (2 Productos) ---
@@ -305,13 +305,13 @@ document.addEventListener('DOMContentLoaded', () => {
         id: 24,
         name: "Olivo Europeo",
         category: "exterior",
-        price: 890,
-        originalPrice: 980,
+        price: 790,
+        originalPrice: 890,
         discount: "9% OFF",
         stock: 3,
         desc: "Árbol mediterráneo de follaje plateado, altamente resistente a la sequía y de larga vida.",
-        spec: "Maceta de 15 litros / 1.3m altura",
-        img: "images/olivo.jpg"
+        spec: "Maceta de 10 litros / 1.3m altura",
+        img: "images/olivo.png"
     },
     {
         id: 25,
@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stock: 11,
         desc: "Planta trepadora de exterior conocida por sus vibrantes flores en tonos fucsia.",
         spec: "Maceta de 25cm / 80cm altura",
-        img: "images/bugambilia.jpg"
+        img: "images/bugambilia.png"
     }
 ];
     // --- ESTADO Y LOCALSTORAGE ---
