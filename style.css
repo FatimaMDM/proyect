@@ -15,7 +15,9 @@ p {
 }
 
 *, *::before, *::after {
-  box-sizing: inherit;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 * {
     margin: 0;
@@ -135,6 +137,7 @@ body {
     display: flex;
     align-items: center;
     gap: 5px;
+    
 }
 
 #cart-count {
@@ -820,4 +823,63 @@ button.btn-1, .btn-secondary {
 
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+/* ==========================================================
+   AJUSTES RESPONSIVOS PARA EL HEADER Y BOTÓN DE SESIÓN
+   ========================================================== */
+
+/* 1. Computadoras (oculta la opción "Iniciar Sesión" del menú desplegable) */
+@media (min-width: 992px) {
+    #mobile-login-item {
+        display: none !important;
+    }
+}
+
+/* 2. Celulares y Tablets (pantallas menores a 991px) */
+@media (max-width: 991px) {
+    
+    /* Mantiene los botones alineados a la derecha del buscador */
+    .header-actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        margin-left: auto;
+    }
+
+    /* Reduce el ancho del buscador para que quepan los demás elementos */
+    .search-input {
+        width: 100px !important;
+        padding: 5px 8px !important;
+        font-size: 11px !important;
+    }
+
+    .search-input:focus {
+        width: 110px !important;
+    }
+
+    /* Ajusta el tamaño de las píldoras de Favoritos y Carrito */
+    .wishlist-btn, 
+    .cart-btn {
+        padding: 5px 8px !important;
+        font-size: 12px !important;
+        white-space: nowrap !important;
+    }
+
+    /* Oculta el botón contenedor de sesión grande del header */
+    #user-action-container {
+        display: none !important;
+    }
+
+    /* Muestra la opción "Iniciar Sesión" dentro del menú desplegable */
+    #mobile-login-item {
+        display: block !important;
+    }
+
+    #mobile-login-item a {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        margin: 5px 15px;
+        font-weight: 700;
+    }
 }

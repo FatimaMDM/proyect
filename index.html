@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Cargar librerías de Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+    <!-- Tu archivo JS de la aplicación -->
+    <script src="tu-archivo.js"></script>
 
     <img class="bg" src="images/bg.svg" alt="">
 
@@ -26,6 +32,9 @@
                     <li><a href="#nosotros">Nosotros</a></li>
                     <li><a href="#productos">Productos</a></li>
                     <li><a href="#contacto">Contacto</a></li>
+                    <li id="mobile-login-item">
+                        <a href="javascript:void(0)" id="btn-login-mobile">Iniciar Sesión</a>
+                    </li>
                 </ul>
             </nav>
 
