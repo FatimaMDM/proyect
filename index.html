@@ -5,15 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verde Vida - Tienda de Plantas</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2.0">
 </head>
 <body>
     <!-- Cargar librerías de Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-
-    <!-- Tu archivo JS de la aplicación -->
-    <script src="tu-archivo.js"></script>
 
     <img class="bg" src="images/bg.svg" alt="">
 
@@ -50,12 +47,10 @@
                     🛒 <span id="cart-count">0</span>
                 </div>
 
-                <div class="user-action" id="user-action-container">
-                    <button type="button" class="btn-auth-nav" id="open-auth-btn">Iniciar Sesión</button>
-                </div>
+                <!-- Contenedor vacío: script.js renderizará el botón dinámicamente -->
+                <div class="user-action" id="user-action-container"></div>
             </div>
 
-        
         </div>
 
         <div class="header-content container">
@@ -67,9 +62,7 @@
                 </p>
                 <a href="#productos" class="btn-1">Explorar Catálogo</a>
             </div>
-           
         </div>
-        
     </header>
 
     <img class="sp" src="images/bg-2.svg" alt="">
@@ -151,9 +144,7 @@
         </div>
 
         <!-- Contenedor Dinámico de Productos -->
-        <div class="product-content" id="product-list">
-            <!-- Renderizado dinámico vía JS -->
-        </div>
+        <div class="product-content" id="product-list"></div>
     </main>
 
     <hr>
@@ -370,6 +361,7 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Carga con parámetro de versión para forzar la actualización de caché -->
+    <script src="script.js?v=1.0.1"></script>
 </body>
 </html>

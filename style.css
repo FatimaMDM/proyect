@@ -826,28 +826,48 @@ button.btn-1, .btn-secondary {
 }
 
 /* ==========================================================
-   AJUSTES RESPONSIVOS PARA EL HEADER Y BOTÓN DE SESIÓN
+   AJUSTES RESPONSIVOS DEFINITIVOS (HEADER, BUSCADOR Y SESIÓN)
    ========================================================== */
 
-/* 1. Computadoras (oculta la opción "Iniciar Sesión" del menú desplegable) */
-@media (min-width: 992px) {
-    #mobile-login-item {
-        display: none !important;
-    }
+/* 1. CONFIGURACIÓN EN ESCRITORIO (Pantallas grandes) */
+#mobile-login-item {
+    display: none !important; /* Oculta la opción dentro del menú desplegable */
 }
 
-/* 2. Celulares y Tablets (pantallas menores a 991px) */
+#user-action-container {
+    display: flex;
+    align-items: center;
+}
+
+/* 2. CONFIGURACIÓN EN MÓVILES Y TABLETS (Menor a 991px) */
 @media (max-width: 991px) {
     
-    /* Mantiene los botones alineados a la derecha del buscador */
+    /* Muestra "Iniciar Sesión" dentro del menú desplegable */
+    #mobile-login-item {
+        display: block !important;
+    }
+
+    #mobile-login-item a {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        margin: 5px 15px;
+        font-weight: 700;
+    }
+
+    /* Oculta el botón verde grande del header para no duplicar */
+    #user-action-container {
+        display: none !important;
+    }
+
+    /* Ajusta y despega los botones en móvil (Buscador, Wishlist y Carrito) */
     .header-actions {
         display: flex !important;
         align-items: center !important;
-        gap: 6px !important;
+        gap: 6px !important; /* Separación para que el carrito no se encime */
         margin-left: auto;
     }
 
-    /* Reduce el ancho del buscador para que quepan los demás elementos */
+    /* Hace el buscador más pequeño en celulares para que quepa todo sin romperse */
     .search-input {
         width: 100px !important;
         padding: 5px 8px !important;
@@ -858,28 +878,61 @@ button.btn-1, .btn-secondary {
         width: 110px !important;
     }
 
-    /* Ajusta el tamaño de las píldoras de Favoritos y Carrito */
+    /* Ajusta Favoritos y Carrito */
     .wishlist-btn, 
     .cart-btn {
         padding: 5px 8px !important;
         font-size: 12px !important;
         white-space: nowrap !important;
     }
-
-    /* Oculta el botón contenedor de sesión grande del header */
-    #user-action-container {
-        display: none !important;
+}
+/* FIX URGENTE DE ALINEACIÓN MÓVIL */
+@media (max-width: 991px) {
+    /* Forzar alineación correcta del header */
+    .menu.container {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: space-between !important;
+        align-items: center !important;
     }
 
-    /* Muestra la opción "Iniciar Sesión" dentro del menú desplegable */
-    #mobile-login-item {
+    /* Reducir y separar las acciones (Buscador, Wishlist, Carrito) */
+    .header-actions {
+        display: flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        flex-wrap: nowrap !important;
+    }
+
+    /* Reducir el ancho de la caja de búsqueda para que el carrito no se encime */
+    .search-input {
+        width: 85px !important;
+        font-size: 10px !important;
+        padding: 4px 6px !important;
+    }
+
+    /* Ajustar las píldoras de Wishlist y Carrito */
+    .wishlist-btn, .cart-btn {
+        padding: 4px 6px !important;
+        font-size: 11px !important;
+        white-space: nowrap !important;
+        margin: 0 !important;
+    }
+
+    /* Mostrar botón de Iniciar Sesión compacto directo en la barra */
+    #user-action-container {
         display: block !important;
     }
 
-    #mobile-login-item a {
-        background-color: rgba(255, 255, 255, 0.15);
-        border-radius: 8px;
-        margin: 5px 15px;
-        font-weight: 700;
+    #user-action-container .btn-auth-nav {
+        padding: 4px 8px !important;
+        font-size: 10px !important;
+        border-radius: 12px !important;
+        white-space: nowrap !important;
+    }
+
+    /* Ocultar la opción duplicada dentro del menú hamburguesa */
+    #mobile-login-item {
+        display: none !important;
     }
 }
