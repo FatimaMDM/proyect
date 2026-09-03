@@ -1026,4 +1026,36 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === checkoutModal) checkoutModal.style.display = 'none';
         if (e.target === thankyouModal) thankyouModal.style.display = 'none';
     });
-});
+    function updateUserHeaderUI() {
+        if (!userActionContainer) return;
+        if (currentUser) {
+            userActionContainer.innerHTML = `
+                <span style="font-size: 13px; color: #3A5A40; font-weight: 600;">Hola, ${currentUser.name}</span>
+                <button type="button" id="logout-btn" style="background:none; border:none; color:#e74c3c; cursor:pointer; font-size:12px; margin-left:8px;">Cerrar sesión</button>
+            `;
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    currentUser = null;
+                    localStorage.removeItem('vv_current_user');
+                    updateUserHeaderUI();
+                });
+            }
+        } else {
+            userActionContainer.innerHTML = `<button type="button" class="btn-1" id="open-auth-btn">Mi Cuenta</button>`;
+        }
+    }
+
+    // --- CERRAR MENÚ RESPONSIVO AL HACER CLIC EN UN ENLACE ---
+    const menuCheckbox = document.getElementById('menu');
+    const navLinks = document.querySelectorAll('.navbar a');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (menuCheckbox) {
+                menuCheckbox.checked = false;
+            }
+        });
+    });
+
+}); // <-- Cierre final de document.addEventListener('DOMContentLoaded', () => {

@@ -9,6 +9,11 @@ html, body {
   box-sizing: border-box;
 }
 
+p {
+    color: #000000; /* Gris casi negro de alta legibilidad */
+    font-weight: 400; /* Grosor regular estándar */
+}
+
 *, *::before, *::after {
   box-sizing: inherit;
 }
@@ -423,14 +428,27 @@ hr {
 @media (max-width: 991px) {
     .container {
         padding: 0 20px;
+        
     }
 
+    /* Dar espacio al icono respecto al buscador */
+    .menu label {
+        margin-right: 15px; 
+    }
     .menu {
         padding: 20px;
+        position: relative; /* OBLIGATORIO: para posicionar la navbar respecto a este contenedor */
+    }
+
+    /* Ocultar la cajita del checkbox */
+    #menu {
+        display: none;
     }
 
     .menu-icono {
         display: block;
+        width: 30px; /* Tamaño recomendado para el icono */
+        cursor: pointer;
     }
 
     .menu .navbar {
@@ -446,14 +464,21 @@ hr {
     .menu .navbar ul {
         flex-direction: column;
         width: 100%;
+        padding: 0;
+    }
+
+    .menu .navbar ul li {
+        width: 100%;
     }
 
     .menu .navbar ul li a {
         color: #ffffff;
         padding: 15px 20px;
         text-align: center;
+        display: block; /* Para que ocupe todo el ancho cliqueable */
     }
 
+    /* Mostrar menú desplegado */
     #menu:checked ~ .navbar {
         display: block;
     }
