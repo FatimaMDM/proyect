@@ -730,12 +730,32 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Render para escritorio
         if (userActionContainer) {
             if (currentUser) {
+                // Un solo botón de cuenta con menú desplegable, para no amontonar botones
                 userActionContainer.innerHTML = `
-                    <span style="font-size:13px; font-weight:600; color:#3A5A40; margin-right:5px;">Hola, ${firstName}</span>
-                    ${currentUser.isAdmin ? '<a href="admin.html" class="btn-auth-nav" style="text-decoration:none;">Panel</a>' : ''}
-                    <button type="button" class="btn-auth-nav" id="btn-orders-desktop">Mis pedidos</button>
-                    <button type="button" class="btn-auth-nav" id="btn-logout-desktop">Salir</button>
+                    <div class="cuenta-menu">
+                        <button type="button" class="cuenta-btn" id="cuenta-btn" aria-haspopup="true" aria-expanded="false">
+                            <span aria-hidden="true">👤</span> ${firstName} <span class="cuenta-flecha" aria-hidden="true">▾</span>
+                        </button>
+                        <div class="cuenta-lista" id="cuenta-lista" role="menu">
+                            <p class="cuenta-saludo">Hola, ${firstName}${currentUser.isAdmin ? ' · Administrador' : ''}</p>
+                            ${currentUser.isAdmin ? '<a href="admin.html" role="menuitem">⚙️ Panel administrativo</a>' : ''}
+                            <button type="button" role="menuitem" id="btn-orders-desktop">📦 Mis pedidos</button>
+                            <button type="button" role="menuitem" id="btn-logout-desktop" class="cuenta-salir">↩ Cerrar sesión</button>
+                        </div>
+                    </div>
                 `;
+                const cuentaBtn = document.getElementById('cuenta-btn');
+                const cuentaLista = document.getElementById('cuenta-lista');
+                const cerrarCuenta = () => { cuentaLista.classList.remove('abierta'); cuentaBtn.setAttribute('aria-expanded', 'false'); };
+                cuentaBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const abrir = !cuentaLista.classList.contains('abierta');
+                    cuentaLista.classList.toggle('abierta', abrir);
+                    cuentaBtn.setAttribute('aria-expanded', String(abrir));
+                });
+                cuentaLista.addEventListener('click', cerrarCuenta);
+                document.addEventListener('click', cerrarCuenta);
+                document.addEventListener('keydown', (e) => { if (e.key === 'Escape') cerrarCuenta(); });
             } else {
                 userActionContainer.innerHTML = `
                     <button type="button" class="btn-auth-nav" id="btn-login-desktop">Iniciar Sesión</button>
