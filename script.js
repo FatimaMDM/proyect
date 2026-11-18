@@ -39,6 +39,22 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
+    // El carrito guardado en el navegador se puede alterar. Al cargar el catálogo se
+    // reemplazan nombre, precio y stock por los de la base, se quitan productos dados
+    // de baja y se ajustan cantidades mayores al stock disponible.
+    function sincronizarCarrito() {
+        const antes = JSON.stringify(cart);
+        cart = cart
+            .map(item => {
+                const p = productsDB.find(x => x.id === item.id);
+                if (!p || p.stock <= 0) return null;
+                const cantidad = Math.max(1, Math.min(parseInt(item.quantity, 10) || 1, p.stock));
+                return { id: p.id, name: p.name, price: p.price, quantity: cantidad, img: p.img, stock: p.stock };
+            })
+            .filter(Boolean);
+        if (JSON.stringify(cart) !== antes) saveCart();
+    }
+
     async function cargarProductos() {
         if (productListContainer) {
             productListContainer.innerHTML = '<p style="width:100%; text-align:center; color:#777; padding:20px;">Cargando productos...</p>';
@@ -50,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 productListContainer.innerHTML = '<p style="width:100%; text-align:center; color:#777; padding:20px;">Aún no hay productos en la base de datos. El administrador debe cargarlos desde cargar-datos.html.</p>';
                 return;
             }
+            sincronizarCarrito();
             renderProducts();
             updateCartUI();
             updateWishlistUI();
@@ -708,7 +725,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función unificada para actualizar el botón de sesión (PC y Móvil)
     function updateUserHeaderUI() {
-        const firstName = currentUser ? (currentUser.name ? currentUser.name.split(' ')[0] : 'Usuario') : '';
+        const firstName = currentUser ? escHTML(currentUser.name ? currentUser.name.split(' ')[0] : 'Usuario') : '';
 
         // 1. Render para escritorio
         if (userActionContainer) {
@@ -784,6 +801,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
+            sincronizarCarrito();
+            updateCartUI();
             cartModal.style.display = 'none';
             irAlPaso1();
             checkoutModal.style.display = 'flex';
