@@ -1,0 +1,106 @@
+/* =========================================================
+   admin.css  |  Estilos SOLO para admin.html
+   ========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --verde: #3A5A40;
+    --verde-claro: #e3ebe1;
+    --fondo: #eeece7;
+    --texto: #303030;
+    --suave: #666;
+    --blanco: #fff;
+    --borde: #e2e2e2;
+    --rojo: #c0392b;
+    --amarillo: #fff7e0;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Poppins', sans-serif; background: var(--fondo); color: var(--texto); line-height: 1.5; }
+button, input, select, textarea { font-family: inherit; font-size: 14px; }
+a { color: var(--verde); }
+:focus-visible { outline: 3px solid var(--verde); outline-offset: 2px; }
+
+/* Barra superior */
+.adm-top { background: var(--blanco); box-shadow: 0 2px 12px rgba(0,0,0,.06); position: sticky; top: 0; z-index: 40; }
+.adm-top-inner { max-width: 1250px; margin: 0 auto; padding: 10px 20px; display: flex; align-items: center; gap: 15px; justify-content: space-between; flex-wrap: wrap; }
+.adm-top img { height: 44px; display: block; }
+.adm-user { font-size: 13px; color: var(--suave); }
+.adm-top-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+.btn { border: none; cursor: pointer; border-radius: 22px; padding: 8px 18px; font-weight: 600; text-decoration: none; display: inline-block; }
+.btn-primario { background: var(--verde); color: var(--blanco); }
+.btn-secundario { background: var(--verde-claro); color: var(--verde); }
+.btn-peligro { background: #fbe4e1; color: var(--rojo); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn-chico { padding: 5px 12px; font-size: 13px; }
+
+/* Pestañas */
+.adm-tabs { max-width: 1250px; margin: 20px auto 0; padding: 0 20px; display: flex; gap: 6px; overflow-x: auto; }
+.adm-tab { background: transparent; border: none; padding: 10px 16px; border-radius: 12px 12px 0 0; cursor: pointer; font-weight: 600; color: var(--suave); white-space: nowrap; }
+.adm-tab.activa { background: var(--blanco); color: var(--verde); }
+
+.adm-main { max-width: 1250px; margin: 0 auto 50px; padding: 0 20px; }
+.adm-panel { display: none; background: var(--blanco); border-radius: 0 15px 15px 15px; padding: 25px; }
+.adm-panel.activa { display: block; }
+.adm-panel h2 { font-size: 22px; color: var(--verde); margin-bottom: 15px; }
+.adm-panel h3 { font-size: 16px; margin: 22px 0 10px; }
+
+/* Tarjetas del dashboard */
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+.kpi { background: var(--fondo); border-radius: 12px; padding: 16px; }
+.kpi span { font-size: 13px; color: var(--suave); }
+.kpi strong { display: block; font-size: 26px; color: var(--verde); }
+
+/* Barra de filtros */
+.adm-filtros { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; align-items: center; }
+.adm-filtros input, .adm-filtros select { padding: 8px 12px; border: 1px solid var(--borde); border-radius: 10px; }
+
+/* Tablas */
+.tabla-wrap { overflow-x: auto; border: 1px solid var(--borde); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; min-width: 650px; font-size: 13px; }
+th, td { padding: 9px 12px; text-align: left; border-bottom: 1px solid var(--borde); vertical-align: middle; }
+th { background: var(--verde-claro); font-weight: 600; white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+td img { width: 42px; height: 42px; object-fit: contain; }
+.num { text-align: right; white-space: nowrap; }
+.vacio { text-align: center; color: var(--suave); padding: 25px; }
+
+.etiqueta { display: inline-block; padding: 2px 10px; border-radius: 10px; font-size: 12px; font-weight: 600; background: var(--verde-claro); color: var(--verde); white-space: nowrap; }
+.etiqueta.pagado { background: #e1efff; color: #1f5fa8; }
+.etiqueta.preparando { background: #fff3d6; color: #9a6a00; }
+.etiqueta.enviado { background: #efe4ff; color: #6a3fb5; }
+.etiqueta.entregado { background: #e1f5e6; color: #217a3c; }
+.etiqueta.cancelado, .etiqueta.reembolsado, .etiqueta.inactivo, .etiqueta.rechazada { background: #fbe4e1; color: var(--rojo); }
+.etiqueta.solicitada { background: #fff3d6; color: #9a6a00; }
+.etiqueta.aprobada { background: #e1efff; color: #1f5fa8; }
+.etiqueta.completada { background: #e1f5e6; color: #217a3c; }
+#md-acciones-revision .btn, #md-acciones-recibir .btn { margin-top: 4px; }
+.stock-bajo { color: var(--rojo); font-weight: 700; }
+
+/* Modal */
+.adm-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 100; align-items: center; justify-content: center; padding: 16px; }
+.adm-modal-card { background: var(--blanco); border-radius: 15px; padding: 25px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; position: relative; }
+.adm-modal-card h3 { color: var(--verde); margin-bottom: 15px; font-size: 20px; }
+.cerrar { position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 26px; cursor: pointer; color: var(--suave); }
+.campo { margin-bottom: 12px; }
+.campo label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.campo input, .campo select, .campo textarea { width: 100%; padding: 9px 12px; border: 1px solid var(--borde); border-radius: 10px; }
+.dos-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.msg { font-size: 13px; margin-top: 8px; min-height: 18px; }
+.msg.error { color: var(--rojo); }
+.msg.ok { color: #217a3c; }
+.detalle-lista { font-size: 13px; margin: 10px 0; }
+.detalle-lista li { margin-left: 18px; }
+.aviso { background: var(--amarillo); padding: 10px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 12px; }
+
+/* Bloqueo */
+.adm-bloqueo { max-width: 500px; margin: 80px auto; background: var(--blanco); border-radius: 15px; padding: 30px; text-align: center; }
+.adm-bloqueo h1 { color: var(--verde); font-size: 24px; margin-bottom: 10px; }
+.adm-bloqueo p { color: var(--suave); margin-bottom: 18px; }
+
+@media (max-width: 600px) {
+    .dos-col { grid-template-columns: 1fr; }
+    .adm-panel { padding: 18px; border-radius: 0 0 15px 15px; }
+    .kpi strong { font-size: 22px; }
+}

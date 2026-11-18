@@ -1,0 +1,146 @@
+/* =========================================================
+   legal.css  |  Estilos SOLO para politicas.html
+   No se carga style.css aquí para que las reglas globales
+   (img {width:450px}, .header {min-height:700px}, etc.)
+   no desacomoden esta página.
+   ========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --verde: #3A5A40;
+    --verde-claro: #e3ebe1;
+    --fondo: #eeece7;
+    --texto: #303030;
+    --texto-suave: #555555;
+    --blanco: #ffffff;
+    --aviso: #fff7e0;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--fondo);
+    color: var(--texto);
+    line-height: 1.7;
+}
+
+a { color: var(--verde); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--verde); outline-offset: 2px; }
+
+/* --- Barra superior --- */
+.legal-top {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--blanco);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+.legal-top-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+.legal-top img { height: 48px; width: auto; display: block; }
+.btn-volver {
+    display: inline-block;
+    background: var(--verde);
+    color: var(--blanco);
+    padding: 9px 22px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+/* --- Encabezado de la página --- */
+.legal-hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 50px 20px 30px;
+}
+.legal-hero h1 { font-size: 42px; line-height: 1.15; font-weight: 800; }
+.legal-hero p { color: var(--texto-suave); margin-top: 10px; max-width: 70ch; }
+.version { font-size: 13px; color: var(--texto-suave); margin-top: 6px; }
+
+.aviso-academico {
+    background: var(--aviso);
+    border-left: 5px solid #e0a800;
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-top: 20px;
+    font-size: 14px;
+    max-width: 80ch;
+}
+
+/* --- Layout: índice + contenido --- */
+.legal-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 35px;
+    align-items: start;
+}
+
+.legal-indice {
+    position: sticky;
+    top: 95px;
+    background: var(--blanco);
+    border-radius: 15px;
+    padding: 20px;
+}
+.legal-indice h2 { font-size: 15px; margin-bottom: 10px; }
+.legal-indice ul { list-style: none; }
+.legal-indice a {
+    display: block;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--texto);
+    text-decoration: none;
+}
+.legal-indice a:hover { background: var(--verde-claro); color: var(--verde); }
+
+.legal-seccion {
+    background: var(--blanco);
+    border-radius: 15px;
+    padding: 30px 35px;
+    margin-bottom: 25px;
+}
+.legal-seccion h2 {
+    font-size: 26px;
+    color: var(--verde);
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+.legal-seccion h3 { font-size: 17px; margin: 20px 0 6px; }
+.legal-seccion p, .legal-seccion li { color: var(--texto-suave); font-size: 15px; max-width: 80ch; }
+.legal-seccion ul, .legal-seccion ol { padding-left: 22px; margin: 8px 0; }
+.legal-seccion li { margin-bottom: 4px; }
+
+.tabla-wrap { overflow-x: auto; margin: 12px 0; }
+.legal-seccion table { border-collapse: collapse; width: 100%; min-width: 480px; font-size: 14px; }
+.legal-seccion th, .legal-seccion td { border: 1px solid #e2e2e2; padding: 9px 12px; text-align: left; vertical-align: top; }
+.legal-seccion th { background: var(--verde-claro); color: var(--texto); }
+
+details { border: 1px solid #e2e2e2; border-radius: 10px; padding: 12px 16px; margin-bottom: 10px; }
+summary { cursor: pointer; font-weight: 600; }
+details p { margin-top: 8px; }
+
+.legal-pie { text-align: center; font-size: 13px; color: var(--texto-suave); padding: 0 20px 40px; }
+
+/* --- Responsive (360 px en adelante) --- */
+@media (max-width: 860px) {
+    .legal-layout { grid-template-columns: 1fr; }
+    .legal-indice { position: static; }
+    .legal-hero h1 { font-size: 30px; }
+    .legal-seccion { padding: 22px 20px; }
+}

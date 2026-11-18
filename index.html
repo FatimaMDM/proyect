@@ -5,12 +5,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verde Vida - Tienda de Plantas</title>
-    <link rel="stylesheet" href="style.css?v=2.0">
+    <link rel="stylesheet" href="style.css?v=2.1">
 </head>
 <body>
     <!-- Cargar librerías de Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <img class="bg" src="images/bg.svg" alt="">
 
@@ -162,24 +163,25 @@
             </div>
 
             <div class="link">
-                <h3>Servicios</h3>
-                <a href="#">Asesoría Botánica</a>
-                <a href="#">Mantenimiento</a>
-                <a href="#">Diseño de Espacios</a>
+                <h3>Ayuda</h3>
+                <a href="politicas.html#faq">Preguntas Frecuentes</a>
+                <a href="politicas.html#envios">Envíos y Entregas</a>
+                <a href="politicas.html#garantias">Garantías</a>
             </div>
 
             <div class="link">
                 <h3>Políticas</h3>
-                <a href="#">Términos y Condiciones</a>
-                <a href="#">Políticas de Envío</a>
-                <a href="#">Devoluciones</a>
+                <a href="politicas.html#terminos">Términos y Condiciones</a>
+                <a href="politicas.html#privacidad">Aviso de Privacidad</a>
+                <a href="politicas.html#cancelaciones">Cancelaciones</a>
+                <a href="politicas.html#devoluciones">Devoluciones</a>
             </div>
 
             <div class="link">
                 <h3>Contacto</h3>
-                <a href="#">Soporte Técnico</a>
-                <a href="#">Preguntas Frecuentes</a>
-                <a href="#">WhatsApp Directo</a>
+                <a href="politicas.html#contacto">Atención al Cliente</a>
+                <a href="politicas.html#proveedor">Datos del Proveedor</a>
+                <a href="politicas.html#facturacion">Facturación</a>
             </div>
         </div>
     </footer>
@@ -241,7 +243,26 @@
                     <input type="password" id="login-password" placeholder="******" required>
                     <small class="error-msg" id="login-pass-err"></small>
                 </div>
+                <p style="text-align:right; margin:-5px 0 15px;">
+                    <a href="javascript:void(0)" id="forgot-link" style="font-size:13px; color:#3A5A40; font-weight:600;">¿Olvidaste tu contraseña?</a>
+                </p>
                 <button type="submit" class="btn-1" style="width:100%;">Ingresar</button>
+            </form>
+
+            <form id="reset-form" class="auth-form">
+                <h3>Recuperar contraseña</h3>
+                <p style="font-size:13px; color:#555; margin-bottom:15px;">
+                    Escribe el correo con el que te registraste y te enviaremos un enlace para crear una nueva contraseña.
+                </p>
+                <div class="form-group">
+                    <label for="reset-email">Correo Electrónico:</label>
+                    <input type="email" id="reset-email" placeholder="tu@correo.com" required>
+                    <small class="error-msg" id="reset-msg"></small>
+                </div>
+                <button type="submit" class="btn-1" id="reset-btn" style="width:100%;">Enviar enlace</button>
+                <p style="text-align:center; margin-top:12px;">
+                    <a href="javascript:void(0)" id="back-to-login" style="font-size:13px; color:#3A5A40; font-weight:600;">Volver a iniciar sesión</a>
+                </p>
             </form>
 
             <form id="signup-form" class="auth-form">
@@ -266,6 +287,10 @@
                     <input type="password" id="signup-confirm-password" placeholder="Repite contraseña" required>
                     <small class="error-msg" id="signup-confirm-err"></small>
                 </div>
+                <p style="font-size:12px; color:#555; margin-bottom:10px;">
+                    Al registrarte, tus datos se tratan conforme a nuestro
+                    <a href="politicas.html#privacidad" target="_blank" style="color:#3A5A40; font-weight:600;">Aviso de Privacidad</a>.
+                </p>
                 <button type="submit" class="btn-1" style="width:100%;">Registrarme</button>
             </form>
         </div>
@@ -308,35 +333,34 @@
             </form>
 
             <form id="checkout-step2" class="checkout-step">
-                <h3>Método de Pago</h3>
+                <h3>Método de Pago (simulado)</h3>
                 <div class="form-group">
-                    <label>Forma de Pago:</label>
+                    <label for="payment-method">Forma de Pago:</label>
                     <select id="payment-method">
-                        <option value="card">Tarjeta de Crédito / Débito</option>
-                        <option value="paypal">PayPal</option>
-                        <option value="transfer">Transferencia Bancaria</option>
+                        <option value="sandbox-aprobado">Pago de prueba: aprobado</option>
+                        <option value="sandbox-rechazado">Pago de prueba: rechazado</option>
                     </select>
                 </div>
-                <div id="card-fields">
-                    <div class="form-group">
-                        <label>Número de Tarjeta:</label>
-                        <input type="text" id="card-number" placeholder="4532 0000 0000 0000" maxlength="16">
-                    </div>
-                    <div style="display:flex; gap:10px;">
-                        <div class="form-group" style="flex:1;">
-                            <label>Vencimiento:</label>
-                            <input type="text" id="card-exp" placeholder="MM/AA" maxlength="5">
-                        </div>
-                        <div class="form-group" style="flex:1;">
-                            <label>CVV:</label>
-                            <input type="text" id="card-cvv" placeholder="123" maxlength="4">
-                        </div>
-                    </div>
-                </div>
+                <p style="font-size:12px; color:#555; background:#fff7e0; padding:10px; border-radius:8px; margin-bottom:10px;">
+                    Tienda académica: el pago es simulado. No se piden ni se guardan datos de tarjeta.
+                </p>
 
                 <div class="order-final-summary">
-                    <p>Total a pagar con Envío: <strong>$<span id="final-total-checkout">0.00</span></strong></p>
+                    <p>Subtotal: $<span id="sum-subtotal">0.00</span> MXN</p>
+                    <p>Descuento: -$<span id="sum-discount">0.00</span> MXN</p>
+                    <p>Envío: $<span id="sum-shipping">0.00</span> MXN</p>
+                    <p>Total a pagar (IVA incluido): <strong>$<span id="final-total-checkout">0.00</span> MXN</strong></p>
                 </div>
+
+                <label style="display:flex; gap:8px; align-items:flex-start; font-size:13px; margin-top:12px; cursor:pointer;">
+                    <input type="checkbox" id="accept-terms" style="width:auto; margin-top:4px;">
+                    <span>He leído y acepto los
+                        <a href="politicas.html#terminos" target="_blank" style="color:#3A5A40; font-weight:600;">Términos y Condiciones</a>,
+                        el <a href="politicas.html#privacidad" target="_blank" style="color:#3A5A40; font-weight:600;">Aviso de Privacidad</a> y la
+                        <a href="politicas.html#devoluciones" target="_blank" style="color:#3A5A40; font-weight:600;">Política de Devoluciones</a>.
+                    </span>
+                </label>
+                <small class="error-msg" id="terms-err" style="color:#e74c3c;"></small>
 
                 <div style="display:flex; gap:10px; margin-top:15px;">
                     <button type="button" class="btn-secondary" id="back-to-step1" style="flex:1;">Atrás</button>
@@ -349,6 +373,60 @@
         </div>
     </div>
 
+    <!-- MODAL MIS PEDIDOS -->
+    <div class="modal-overlay" id="orders-modal">
+        <div class="modal-card" style="max-width:480px;">
+            <span class="close-modal" id="close-orders">&times;</span>
+            <h2 style="color:#3A5A40; margin-bottom:15px;">Mis pedidos</h2>
+            <div id="orders-list" style="max-height:60vh; overflow-y:auto;"></div>
+        </div>
+    </div>
+
+    <!-- MODAL SOLICITUD DE CANCELACIÓN / DEVOLUCIÓN -->
+    <div class="modal-overlay" id="return-modal" role="dialog" aria-modal="true" aria-labelledby="return-title">
+        <div class="modal-card" style="max-width:480px; text-align:left;">
+            <span class="close-modal" id="close-return">&times;</span>
+            <h2 id="return-title" style="color:#3A5A40; margin-bottom:15px; font-size:20px;">Solicitud</h2>
+            <form id="return-form" novalidate>
+                <div id="return-productos" style="margin-bottom:12px;"></div>
+                <div class="form-group">
+                    <label for="return-motivo">Motivo:</label>
+                    <select id="return-motivo" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="return-descripcion">Describe lo que pasó:</label>
+                    <textarea id="return-descripcion" rows="3" maxlength="500" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:10px; font-family:inherit;"></textarea>
+                </div>
+                <p id="return-aviso" style="font-size:12px; color:#555; background:#fff7e0; padding:10px; border-radius:8px; margin-bottom:10px;"></p>
+                <small class="error-msg" id="return-err" style="color:#e74c3c; display:block; margin-bottom:8px;"></small>
+                <button type="submit" class="btn-1" id="return-submit" style="width:100%;">Enviar solicitud</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL AVISO INICIAL: TÉRMINOS Y PRIVACIDAD -->
+    <div class="modal-overlay" id="consent-modal" role="dialog" aria-modal="true" aria-labelledby="consent-title">
+        <div class="modal-card" style="max-width:480px; text-align:center;">
+            <div style="font-size:40px;">🌿</div>
+            <h2 id="consent-title" style="color:#3A5A40; margin-bottom:10px;">Bienvenido a Verde Vida</h2>
+            <p style="font-size:14px; color:#555; margin-bottom:12px;">
+                Para usar la tienda, revisa y acepta nuestros documentos:
+            </p>
+            <p style="font-size:14px; margin-bottom:15px; line-height:1.9;">
+                <a href="politicas.html#terminos" target="_blank" style="color:#3A5A40; font-weight:600;">Términos y Condiciones</a><br>
+                <a href="politicas.html#privacidad" target="_blank" style="color:#3A5A40; font-weight:600;">Aviso de Privacidad</a><br>
+                <a href="politicas.html#devoluciones" target="_blank" style="color:#3A5A40; font-weight:600;">Devoluciones y Garantías</a>
+            </p>
+            <label style="display:flex; gap:8px; align-items:flex-start; text-align:left; font-size:13px; margin-bottom:8px; cursor:pointer;">
+                <input type="checkbox" id="consent-check" style="width:auto; margin-top:4px;">
+                <span>He leído y acepto los Términos y Condiciones y el Aviso de Privacidad.</span>
+            </label>
+            <small class="error-msg" id="consent-err" style="color:#e74c3c; display:block; margin-bottom:8px;"></small>
+            <p style="font-size:12px; color:#777; margin-bottom:15px;">Tienda académica: los productos y pagos son simulados.</p>
+            <button type="button" class="btn-1" id="consent-accept-btn" style="width:100%;">Aceptar y entrar a la tienda</button>
+        </div>
+    </div>
+
     <!-- MODAL CONFIRMACIÓN -->
     <div class="modal-overlay" id="thankyou-modal">
         <div class="modal-card" style="text-align:center;">
@@ -356,12 +434,12 @@
             <h2 style="color:#3A5A40; margin-bottom:10px;">¡Gracias por tu Compra!</h2>
             <p>Tu pedido ha sido procesado exitosamente.</p>
             <p style="font-size:18px; margin:15px 0;">Número de Orden: <strong id="order-number-display" style="color:#3A5A40;">ORD-00000</strong></p>
-            <p style="font-size:14px; color:#555;">Se ha enviado un correo con el resumen detallado de tu envío.</p>
+            <p style="font-size:14px; color:#555;">Guarda tu número de pedido para darle seguimiento.</p>
             <button type="button" class="btn-1" id="close-thankyou-btn" style="margin-top:20px;">Volver a la Tienda</button>
         </div>
     </div>
 
     <!-- Carga con parámetro de versión para forzar la actualización de caché -->
-    <script src="script.js?v=1.0.1"></script>
+    <script src="script.js?v=2.2.0"></script>
 </body>
 </html>

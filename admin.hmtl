@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel administrativo | Verde Vida</title>
+    <link rel="stylesheet" href="admin.css?v=1.0">
+</head>
+<body>
+
+<!-- Se muestra mientras se revisa la sesión, o si el usuario no es admin -->
+<div class="adm-bloqueo" id="bloqueo">
+    <h1>Panel administrativo</h1>
+    <p id="bloqueo-msg">Revisando tu sesión...</p>
+    <a href="index.html" class="btn btn-primario">Ir a la tienda</a>
+</div>
+
+<div id="app" style="display:none;">
+    <header class="adm-top">
+        <div class="adm-top-inner">
+            <a href="index.html" aria-label="Ir a la tienda"><img src="images/logo.ico" alt="Verde Vida"></a>
+            <div class="adm-top-actions">
+                <span class="adm-user" id="adm-user"></span>
+                <a href="index.html" class="btn btn-secundario btn-chico">Ver tienda</a>
+                <button type="button" class="btn btn-peligro btn-chico" id="btn-salir">Cerrar sesión</button>
+            </div>
+        </div>
+    </header>
+
+    <nav class="adm-tabs" role="tablist">
+        <button class="adm-tab activa" data-tab="dashboard" role="tab">Dashboard</button>
+        <button class="adm-tab" data-tab="pedidos" role="tab">Pedidos</button>
+        <button class="adm-tab" data-tab="productos" role="tab">Productos e inventario</button>
+        <button class="adm-tab" data-tab="devoluciones" role="tab">Devoluciones</button>
+        <button class="adm-tab" data-tab="cupones" role="tab">Cupones</button>
+        <button class="adm-tab" data-tab="clientes" role="tab">Clientes</button>
+        <button class="adm-tab" data-tab="reportes" role="tab">Reportes</button>
+    </nav>
+
+    <main class="adm-main">
+
+        <!-- DASHBOARD -->
+        <section class="adm-panel activa" id="tab-dashboard">
+            <h2>Resumen de la tienda</h2>
+            <div class="kpis">
+                <div class="kpi"><span>Ventas (sin cancelados)</span><strong id="k-ventas">$0.00</strong></div>
+                <div class="kpi"><span>Pedidos totales</span><strong id="k-pedidos">0</strong></div>
+                <div class="kpi"><span>Por preparar o enviar</span><strong id="k-pendientes">0</strong></div>
+                <div class="kpi"><span>Productos con stock bajo</span><strong id="k-stock">0</strong></div>
+                <div class="kpi"><span>Devoluciones por atender</span><strong id="k-devoluciones">0</strong></div>
+                <div class="kpi"><span>Clientes registrados</span><strong id="k-clientes">0</strong></div>
+            </div>
+            <h3>Últimos pedidos</h3>
+            <div class="tabla-wrap"><table>
+                <thead><tr><th>Folio</th><th>Fecha</th><th>Cliente</th><th class="num">Total</th><th>Estado</th></tr></thead>
+                <tbody id="dash-pedidos"></tbody>
+            </table></div>
+            <h3>Stock bajo (5 o menos)</h3>
+            <div class="tabla-wrap"><table>
+                <thead><tr><th>SKU</th><th>Producto</th><th class="num">Stock</th></tr></thead>
+                <tbody id="dash-stock"></tbody>
+            </table></div>
+        </section>
+
+        <!-- PEDIDOS -->
+        <section class="adm-panel" id="tab-pedidos">
+            <h2>Pedidos</h2>
+            <div class="adm-filtros">
+                <input type="search" id="f-pedido" placeholder="Buscar folio o correo" aria-label="Buscar pedido">
+                <select id="f-estado" aria-label="Filtrar por estado">
+                    <option value="">Todos los estados</option>
+                    <option value="pagado">Pagado</option>
+                    <option value="preparando">Preparando</option>
+                    <option value="enviado">Enviado</option>
+                    <option value="entregado">Entregado</option>
+                    <option value="cancelado">Cancelado</option>
+                    <option value="reembolsado">Reembolsado</option>
+                </select>
+                <button class="btn btn-secundario btn-chico" id="btn-csv-pedidos">Exportar CSV</button>
+            </div>
+            <div class="tabla-wrap"><table>
+                <thead><tr><th>Folio</th><th>Fecha</th><th>Cliente</th><th class="num">Total</th><th>Estado</th><th></th></tr></thead>
+                <tbody id="tabla-pedidos"></tbody>
+            </table></div>
+        </section>
+
+        <!-- PRODUCTOS -->
+        <section class="adm-panel" id="tab-productos">
+            <h2>Productos e inventario</h2>
+            <div class="adm-filtros">
+                <input type="search" id="f-producto" placeholder="Buscar nombre o SKU" aria-label="Buscar producto">
+                <select id="f-prod-estado" aria-label="Filtrar por estado">
+                    <option value="">Todos</option>
+                    <option value="activo">Activos</option>
+                    <option value="inactivo">Dados de baja</option>
+                </select>
+                <button class="btn btn-primario btn-chico" id="btn-nuevo-producto">+ Nuevo producto</button>
+            </div>
+            <div class="tabla-wrap"><table>
+                <thead><tr><th></th><th>SKU</th><th>Nombre</th><th>Categoría</th><th class="num">Precio</th><th class="num">Stock</th><th>Estado</th><th></th></tr></thead>
+                <tbody id="tabla-productos"></tbody>
+            </table></div>
+            <h3>Últimos movimientos de inventario</h3>
+            <div class="tabla-wrap"><table>
+                <thead><tr><th>Fecha</th><th>Producto</th><th>Tipo</th><th class="num">Cantidad</th><th class="num">Antes → Después</th><th>Motivo</th><th>Referencia</th></tr></thead>
+                <tbody id="tabla-movimientos"></tbody>
+            </table></div>
+        </section>
+
+        <!-- DEVOLUCIONES -->
+        <section class="adm-panel" id="tab-devoluciones">
+            <h2>Cancelaciones y devoluciones</h2>
+            <div class="adm-filtros">
+                <select id="f-dev-estado" aria-label="Filtrar por estado">
+                    <option value="">Todas</option>
+                    <option value="solicitada">En revisión</option>
+                    <option value="aprobada">Aprobadas (por recibir)</option>
+                    <option value="completada">Completadas</option>
+                    <option value="rechazada">Rechazadas</option>
+                </select>
+            </div>
+            <div class="tabla-wrap"><table>
+                <thead><tr><th>Folio</th><th>Fecha</th><th>Tipo</th><th>Pedido</th><th>Cliente</th><th>Motivo</th><th>Estado</th><th></th></tr></thead>
+                <tbody id="tabla-devoluciones"></tbody>
+            </table></div>
+        </section>
+
+        <!-- CUPONES -->
+        <section class="adm-panel" id="tab-cupones">
+            <h2>Cupones</h2>
+            <div class="adm-filtros">
+                <button class="btn btn-primario btn-chico" id="btn-nuevo-cupon">+ Nuevo cupón</button>
+            </div>
+            <div class="tabla-wrap"><table>
+                <thead><tr><th>Código</th><th class="num">Descuento</th><th>Vigencia</th><th class="num">Usos</th><th class="num">Compra mínima</th><th>Un uso por cliente</th><th>Estado</th><th></th></tr></thead>
+                <tbody id="tabla-cupones"></tbody>
+            </table></div>
+        </section>
+
+        <!-- CLIENTES -->
+        <section class="adm-panel" id="tab-clientes">
+            <h2>Clientes</h2>
+            <div class="tabla-wrap"><table>
+                <thead><tr><th>Nombre</th><th>Correo</th><th>Rol</th><th>Registro</th><th class="num">Pedidos</th></tr></thead>
+                <tbody id="tabla-clientes"></tbody>
+            </table></div>
+        </section>
+
+        <!-- REPORTES -->
+        <section class="adm-panel" id="tab-reportes">
+            <h2>Reportes</h2>
+            <h3>Productos más vendidos</h3>
+            <div class="tabla-wrap"><table>
+                <thead><tr><th>Producto</th><th>SKU</th><th class="num">Unidades</th><th class="num">Importe</th></tr></thead>
+                <tbody id="tabla-top"></tbody>
+            </table></div>
+            <h3>Pedidos por estado</h3>
+            <div class="tabla-wrap"><table>
+                <thead><tr><th>Estado</th><th class="num">Pedidos</th><th class="num">Importe</th></tr></thead>
+                <tbody id="tabla-por-estado"></tbody>
+            </table></div>
+            <h3>Bitácora de cambios (auditoría)</h3>
+            <div class="tabla-wrap"><table>
+                <thead><tr><th>Fecha</th><th>Quién</th><th>Acción</th><th>Entidad</th><th>Detalle</th></tr></thead>
+                <tbody id="tabla-auditoria"></tbody>
+            </table></div>
+        </section>
+    </main>
+</div>
+
+<!-- MODAL DETALLE / ESTADO DE PEDIDO -->
+<div class="adm-modal" id="modal-pedido" role="dialog" aria-modal="true" aria-labelledby="mp-titulo">
+    <div class="adm-modal-card">
+        <button class="cerrar" data-cerrar aria-label="Cerrar">&times;</button>
+        <h3 id="mp-titulo">Pedido</h3>
+        <div id="mp-info"></div>
+        <ul class="detalle-lista" id="mp-partidas"></ul>
+        <div class="campo">
+            <label for="mp-estado">Cambiar estado a:</label>
+            <select id="mp-estado"></select>
+        </div>
+        <div class="dos-col" id="mp-envio" style="display:none;">
+            <div class="campo"><label for="mp-paqueteria">Paquetería</label><input id="mp-paqueteria" placeholder="Ej. Estafeta"></div>
+            <div class="campo"><label for="mp-guia">Número de guía</label><input id="mp-guia" placeholder="Ej. 1234567890"></div>
+        </div>
+        <div class="aviso" id="mp-aviso-cancel" style="display:none;">Al cancelar, las unidades del pedido regresan al inventario y se registra el movimiento.</div>
+        <button class="btn btn-primario" id="mp-guardar">Guardar estado</button>
+        <p class="msg" id="mp-msg"></p>
+    </div>
+</div>
+
+<!-- MODAL DEVOLUCIÓN / CANCELACIÓN -->
+<div class="adm-modal" id="modal-devolucion" role="dialog" aria-modal="true" aria-labelledby="md-titulo">
+    <div class="adm-modal-card">
+        <button class="cerrar" data-cerrar aria-label="Cerrar">&times;</button>
+        <h3 id="md-titulo">Solicitud</h3>
+        <div id="md-info"></div>
+        <p style="font-size:13px; font-weight:600; margin-top:8px;">Productos:</p>
+        <ul class="detalle-lista" id="md-partidas"></ul>
+        <p style="font-size:13px; font-weight:600;">Historial:</p>
+        <ul class="detalle-lista" id="md-historial"></ul>
+
+        <div class="campo" id="md-respuesta-wrap">
+            <label for="md-respuesta">Respuesta al cliente</label>
+            <textarea id="md-respuesta" rows="2" maxlength="300" placeholder="Obligatoria si rechazas"></textarea>
+        </div>
+        <div class="campo">
+            <label for="md-monto">Monto a reembolsar (MXN)</label>
+            <input id="md-monto" type="number" min="0" step="0.01">
+        </div>
+
+        <div id="md-acciones-revision">
+            <div class="aviso" id="md-aviso-cancel">Al aprobar, el pedido se cancela, el stock regresa al inventario y se registra el reembolso.</div>
+            <button class="btn btn-primario" id="md-aprobar">Aprobar</button>
+            <button class="btn btn-peligro" id="md-rechazar">Rechazar</button>
+        </div>
+        <div id="md-acciones-recibir">
+            <label style="display:flex; gap:8px; align-items:center; font-size:13px; margin-bottom:10px;">
+                <input type="checkbox" id="md-reingresa" style="width:auto;"> Regresar las unidades al inventario (desmarca si el producto llegó dañado o la planta murió)
+            </label>
+            <button class="btn btn-primario" id="md-completar">Producto recibido: aplicar reembolso</button>
+        </div>
+        <p id="md-final" class="aviso" style="display:none;">Esta solicitud ya está cerrada.</p>
+        <p class="msg" id="md-msg"></p>
+    </div>
+</div>
+
+<!-- MODAL CUPÓN -->
+<div class="adm-modal" id="modal-cupon" role="dialog" aria-modal="true" aria-labelledby="pc-titulo">
+    <div class="adm-modal-card">
+        <button class="cerrar" data-cerrar aria-label="Cerrar">&times;</button>
+        <h3 id="pc-titulo">Cupón</h3>
+        <form id="form-cupon" novalidate>
+            <div class="dos-col">
+                <div class="campo"><label for="pc-codigo">Código</label><input id="pc-codigo" maxlength="20" placeholder="Ej. VERANO15"></div>
+                <div class="campo"><label for="pc-valor">Descuento (%)</label><input id="pc-valor" type="number" min="1" max="90"></div>
+            </div>
+            <div class="dos-col">
+                <div class="campo"><label for="pc-inicio">Válido desde</label><input id="pc-inicio" type="date"></div>
+                <div class="campo"><label for="pc-fin">Válido hasta</label><input id="pc-fin" type="date"></div>
+            </div>
+            <div class="dos-col">
+                <div class="campo"><label for="pc-limite">Límite total de usos (vacío = sin límite)</label><input id="pc-limite" type="number" min="1" step="1"></div>
+                <div class="campo"><label for="pc-minimo">Compra mínima (MXN)</label><input id="pc-minimo" type="number" min="0" step="0.01"></div>
+            </div>
+            <div class="campo"><label for="pc-descripcion">Descripción / condiciones</label><input id="pc-descripcion" maxlength="150"></div>
+            <label style="display:flex; gap:8px; align-items:center; font-size:13px; margin-bottom:8px;"><input type="checkbox" id="pc-unuso" style="width:auto;"> Solo un uso por cliente</label>
+            <label style="display:flex; gap:8px; align-items:center; font-size:13px; margin-bottom:12px;"><input type="checkbox" id="pc-activo" style="width:auto;"> Activo</label>
+            <button type="submit" class="btn btn-primario" id="pc-guardar">Guardar cupón</button>
+            <p class="msg" id="pc-msg"></p>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL PRODUCTO -->
+<div class="adm-modal" id="modal-producto" role="dialog" aria-modal="true" aria-labelledby="pp-titulo">
+    <div class="adm-modal-card">
+        <button class="cerrar" data-cerrar aria-label="Cerrar">&times;</button>
+        <h3 id="pp-titulo">Producto</h3>
+        <form id="form-producto" novalidate>
+            <div class="dos-col">
+                <div class="campo"><label for="pp-sku">SKU</label><input id="pp-sku" required></div>
+                <div class="campo"><label for="pp-categoria">Categoría</label><select id="pp-categoria" required></select></div>
+            </div>
+            <div class="campo"><label for="pp-nombre">Nombre</label><input id="pp-nombre" required maxlength="80"></div>
+            <div class="campo"><label for="pp-descripcion">Descripción</label><textarea id="pp-descripcion" rows="2" maxlength="300"></textarea></div>
+            <div class="campo"><label for="pp-especificacion">Medidas / presentación</label><input id="pp-especificacion" maxlength="80"></div>
+            <div class="dos-col">
+                <div class="campo"><label for="pp-precio">Precio de venta (MXN)</label><input id="pp-precio" type="number" min="1" step="0.01" required></div>
+                <div class="campo"><label for="pp-precio-original">Precio anterior (opcional)</label><input id="pp-precio-original" type="number" min="0" step="0.01"></div>
+            </div>
+            <div class="dos-col">
+                <div class="campo"><label for="pp-stock">Stock</label><input id="pp-stock" type="number" min="0" step="1" required></div>
+                <div class="campo"><label for="pp-estado">Estado</label>
+                    <select id="pp-estado"><option value="activo">Activo</option><option value="inactivo">Dado de baja</option></select>
+                </div>
+            </div>
+            <div class="campo" id="pp-motivo-wrap" style="display:none;">
+                <label for="pp-motivo">Motivo del ajuste de stock</label>
+                <select id="pp-motivo">
+                    <option value="">Selecciona un motivo</option>
+                    <option value="reabastecimiento">Reabastecimiento (llegó mercancía)</option>
+                    <option value="conteo fisico">Corrección por conteo físico</option>
+                    <option value="merma">Merma (planta dañada o muerta)</option>
+                    <option value="devolucion">Devolución de cliente</option>
+                </select>
+            </div>
+            <div class="campo"><label for="pp-imagen">Ruta de imagen</label><input id="pp-imagen" placeholder="images/mi-planta.jpg"></div>
+            <button type="submit" class="btn btn-primario" id="pp-guardar">Guardar producto</button>
+            <p class="msg" id="pp-msg"></p>
+        </form>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="admin.js?v=1.1"></script>
+</body>
+</html>

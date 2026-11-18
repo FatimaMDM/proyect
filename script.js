@@ -1,6 +1,6 @@
 // Configuración extraída de tu consola
 const firebaseConfig = {
-  apiKey: "AIzaSyBdQgR-W1GmyzyMyzCX2qUf2UkEHRHMH1Q",
+  apiKey: "AIzaSyBdQgR-W1GMyzyMyzCX2qUf2UkEHRHMH1Q",
   authDomain: "verdevida-26b81.firebaseapp.com",
   projectId: "verdevida-26b81",
   storageBucket: "verdevida-26b81.firebasestorage.app",
@@ -14,320 +14,84 @@ if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const auth = firebase.auth();
+const db = firebase.firestore();
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- BASE DE DATOS DE PRODUCTOS ---
-    const productsDB = [
-        {
-            id: 1,
-            name: "Monstera Deliciosa",
-            category: "interior",
-            price: 397,
-            originalPrice: 450,
-            discount: "12% OFF",
-            stock: 8,
-            desc: "Conocida como Costilla de Adán, destaca por sus imponentes hojas caladas.",
-            spec: "Mediana de 68 x 25.4cm",
-            img: "images/monstera deliciosa.jpg"
-        },
-        {
-            id: 2,
-            name: "Ficus Lyrata",
-            category: "interior",
-            price: 425,
-            originalPrice: 425,
-            discount: null,
-            stock: 5,
-            desc: "Higuera de hoja de violín, ideal para aportar estructura y elegancia en interiores.",
-            spec: "Grande de 66cm x 20.32cm",
-            img: "images/ficus.png"
-        },
-        {
-            id: 3,
-            name: "Pothos (Teléfono)",
-            category: "interior",
-            price: 120,
-            originalPrice: 150,
-            discount: "20% OFF",
-            stock: 12,
-            desc: "Planta colgante o trepadora de hojas acorazonadas y muy fácil cuidado.",
-            spec: "Compacto de 25cm x 13cm",
-            img: "images/pothos.png"
-        },
-        {
-            id: 4,
-            name: "Sansevieria",
-            category: "interior",
-            price: 140,
-            originalPrice: 140,
-            discount: null,
-            stock: 15,
-            desc: "Conocida como Lengua de Suegra, excelente purificadora de aire y muy resistente.",
-            spec: "Mediana de 40cm x 15cm",
-            img: "images/sanseveria.png"
-        },
-        {
-            id: 7,
-            name: "Limonero Persa",
-            category: "exterior",
-            price: 580,
-            originalPrice: 650,
-            discount: "10% OFF",
-            stock: 6,
-            desc: "Árbol frutal perfecto para patios y jardines iluminados. Produce limones todo el año.",
-            spec: "Maceta de 5 litros / 1.2m altura",
-            img: "images/limonero.png"
-        },
-        {
-            id: 8,
-            name: "Palmera Africana",
-            category: "exterior",
-            price: 750,
-            originalPrice: 750,
-            discount: null,
-            stock: 4,
-            desc: "Aporta un toque tropical e imponente a jardines de sol directo.",
-            spec: "Maceta de 10 litros / 1.5m altura",
-            img: "images/palmera.png"
-        },
-        {
-            id: 9,
-            name: "Rosemery (Romero)",
-            category: "exterior",
-            price: 95,
-            originalPrice: 120,
-            discount: "20% OFF",
-            stock: 15,
-            desc: "Arbusto aromático y medicinal, de sol directo y bajo consumo de agua.",
-            spec: "Maceta de 18cm",
-            img: "images/romero.png"
-        },
-        {
-            id: 5,
-            name: "Hortensias",
-            category: "flores",
-            price: 320,
-            originalPrice: 380,
-            discount: "15% OFF",
-            stock: 4,
-            desc: "Flores de volumen vibrante y tonos intensos, perfectas para centro de mesa.",
-            spec: "Manojo de 50cm",
-            img: "images/hortencias.png"
-        },
-        {
-            id: 10,
-            name: "Rosal Rojo",
-            category: "flores",
-            price: 210,
-            originalPrice: 250,
-            discount: "16% OFF",
-            stock: 9,
-            desc: "Clásico rosal de exterior con floración abundante durante primavera y verano.",
-            spec: "Maceta de 25cm",
-            img: "images/rosal.png"
-        },
-        {
-            id: 11,
-            name: "Geranios Mixtos",
-            category: "flores",
-            price: 130,
-            originalPrice: 130,
-            discount: null,
-            stock: 18,
-            desc: "Planta de exterior súper resistente, de florecimiento continuo e intenso.",
-            spec: "Maceta de 20cm",
-            img: "images/geranios.png"
-        },
-        {
-            id: 6,
-            name: "Suculenta",
-            category: "suculentas",
-            price: 70,
-            originalPrice: 70,
-            discount: null,
-            stock: 20,
-            desc: "Detalle compacto y moderno, ideal para escritorios y repisas.",
-            spec: "Mini de 10cm x 8cm",
-            img: "images/suculentas.png"
-        },
-        {
-            id: 12,
-            name: "Cactus Órgano",
-            category: "suculentas",
-            price: 280,
-            originalPrice: 320,
-            discount: "12% OFF",
-            stock: 7,
-            desc: "Cactus vertical estilizado, perfecto para paisajismo moderno y bajo riego.",
-            spec: "Maceta de 30cm / Altura 50cm",
-            img: "images/cactus.png"
-        },
-        {
-            id: 13,
-            name: "Maceta de Cerámica Artesanal",
-            category: "macetas",
-            price: 310,
-            originalPrice: 310,
-            discount: null,
-            stock: 10,
-            desc: "Maceta de barro cocido con acabo esmaltado, incluye plato de drenaje.",
-            spec: "25cm x 25cm",
-            img: "images/maceta-ceramica.png"
-        },
-        {
-            id: 14,
-            name: "Maceta Colgante de Fibra de Coco",
-            category: "macetas",
-            price: 185,
-            originalPrice: 220,
-            discount: "15% OFF",
-            stock: 14,
-            desc: "Ideal para helechos y plantas trepadoras, excelente retención de humedad.",
-            spec: "Diámetro 30cm",
-            img: "images/maceta-colgante.png"
-        },
-        {
-            id: 15,
-            name: "Kit de Semillas Aromáticas",
-            category: "semillas",
-            price: 150,
-            originalPrice: 150,
-            discount: null,
-            stock: 25,
-            desc: "Incluye sobres de Menta, Albahaca, Cilantro y Perejil con guía de siembra.",
-            spec: " Pack de 4 sobres",
-            img: "images/semillas-aromaticas.png"
-        },
-        {
-            id: 16,
-            name: "Semillas de Girasol Gigante",
-            category: "semillas",
-            price: 65,
-            originalPrice: 80,
-            discount: "18% OFF",
-            stock: 30,
-            desc: "Semillas de germinación rápida para cultivar girasoles de hasta 2 metros.",
-            spec: "Sobre de 50g",
-            img: "images/semillas-girasol.png"
-        },
-        {
-            id: 17,
-            name: "Sustrato Preparado Nutritivo",
-            category: "accesorios",
-            price: 110,
-            originalPrice: 110,
-            discount: null,
-            stock: 40,
-            desc: "Mezcla balanceada de tierra de hoja, humus de lombriz y perlita para drenaje.",
-            spec: "Bolsa de 5kg",
-            img: "images/sustrato.png"
-        },
-        {
-            id: 18,
-            name: "Kit de Herramientas de Jardín",
-            category: "accesorios",
-            price: 340,
-            originalPrice: 400,
-            discount: "15% OFF",
-            stock: 8,
-            desc: "Incluye pala, trasplantador, rastrillo de mano y tijeras de podar ergonómicas.",
-            spec: "Set de 4 piezas con estuche",
-            img: "images/herramientas.png"
-        },
-        {
-            id: 19,
-            name: "Echeveria Elegans",
-            category: "suculentas",
-            price: 85,
-            originalPrice: 85,
-            discount: null,
-            stock: 18,
-            desc: "Conocida como Rosa de Alabastro, destaca por sus rosetas de hojas azuladas.",
-            spec: "Maceta de 12cm",
-            img: "images/echeveria.png"
-        },
-        {
-            id: 20,
-            name: "Maceta de Auto-Riego Modern",
-            category: "macetas",
-            price: 260,
-            originalPrice: 290,
-            discount: "10% OFF",
-            stock: 12,
-            desc: "Sistema con indicador de nivel de agua que facilita el cuidado prolongado.",
-            spec: "Mediana de 22cm x 20cm",
-            img: "images/maceta-autoriego.png"
-        },
-        {
-            id: 21,
-            name: "Semillas de Lavanda Francesa",
-            category: "semillas",
-            price: 75,
-            originalPrice: 90,
-            discount: "16% OFF",
-            stock: 22,
-            desc: "Variedad de alta germinación para cultivar hermosas plantas aromáticas y de color violeta.",
-            spec: "Sobre de 500 semillas",
-            img: "images/semillas-lavanda.png"
-        },
-        {
-            id: 22,
-            name: "Humus de Lombriz Orgánico",
-            category: "accesorios",
-            price: 95,
-            originalPrice: 95,
-            discount: null,
-            stock: 35,
-            desc: "Abono 100% natural rico en nutrientes para revitalizar el suelo de tus plantas.",
-            spec: "Bolsa de 5kg",
-            img: "images/humus-lombriz.png"
-        },
-        {
-            id: 23,
-            name: "Regadera de Metal Vintage",
-            category: "accesorios",
-            price: 290,
-            originalPrice: 340,
-            discount: "14% OFF",
-            stock: 9,
-            desc: "Regadera de acero galvanizado con boquilla rociadora desmontable y acabado elegante.",
-            spec: "Capacidad de 1.8 Litros",
-            img: "images/regadera-vintage.png"
-        },
-        {
-            id: 24,
-            name: "Olivo Europeo",
-            category: "exterior",
-            price: 790,
-            originalPrice: 890,
-            discount: "9% OFF",
-            stock: 3,
-            desc: "Árbol mediterráneo de follaje plateado, altamente resistente a la sequía y de larga vida.",
-            spec: "Maceta de 10 litros / 1.3m altura",
-            img: "images/olivo.png"
-        },
-        {
-            id: 25,
-            name: "Bougainvillea (Bugambilia)",
-            category: "exterior",
-            price: 240,
-            originalPrice: 240,
-            discount: null,
-            stock: 11,
-            desc: "Planta trepadora de exterior conocida por sus vibrantes flores en tonos fucsia.",
-            spec: "Maceta de 25cm / 80cm altura",
-            img: "images/bugambilia.png"
+    // --- PRODUCTOS: se leen de Firestore (colección "productos") ---
+    let productsDB = [];
+
+    // Convierte un documento de Firestore al formato que usa la interfaz
+    function docAProducto(doc) {
+        const d = doc.data();
+        return {
+            id: doc.id,
+            sku: d.sku || '',
+            name: d.nombre,
+            category: d.categoria,
+            price: d.precio,
+            originalPrice: d.precio_original || d.precio,
+            discount: d.descuento || null,
+            stock: d.stock || 0,
+            desc: d.descripcion || '',
+            spec: d.especificacion || '',
+            img: d.imagen_url || ''
+        };
+    }
+
+    async function cargarProductos() {
+        if (productListContainer) {
+            productListContainer.innerHTML = '<p style="width:100%; text-align:center; color:#777; padding:20px;">Cargando productos...</p>';
         }
-    ];
+        try {
+            const snap = await db.collection('productos').where('estado', '==', 'activo').get();
+            productsDB = snap.docs.map(docAProducto).sort((a, b) => a.id.localeCompare(b.id));
+            if (productsDB.length === 0 && productListContainer) {
+                productListContainer.innerHTML = '<p style="width:100%; text-align:center; color:#777; padding:20px;">Aún no hay productos en la base de datos. El administrador debe cargarlos desde cargar-datos.html.</p>';
+                return;
+            }
+            renderProducts();
+            updateCartUI();
+            updateWishlistUI();
+        } catch (err) {
+            console.error('Error al cargar productos:', err);
+            if (productListContainer) {
+                productListContainer.innerHTML = '<p style="width:100%; text-align:center; color:#e74c3c; padding:20px;">No se pudieron cargar los productos. Revisa tu conexión e intenta de nuevo.</p>';
+            }
+        }
+    }
 
     // --- ESTADO Y LOCALSTORAGE ---
-    let cart = JSON.parse(localStorage.getItem('vv_cart')) || [];
-    let wishlist = JSON.parse(localStorage.getItem('vv_wishlist')) || [];
-    let users = JSON.parse(localStorage.getItem('vv_users')) || [];
-    let currentUser = JSON.parse(localStorage.getItem('vv_current_user')) || null;
+    // v2: los ids ahora son los de Firestore (prod_001, prod_002...)
+    localStorage.removeItem('vv_cart');
+    localStorage.removeItem('vv_wishlist');
+    let cart = JSON.parse(localStorage.getItem('vv_cart_v2')) || [];
+    let wishlist = JSON.parse(localStorage.getItem('vv_wishlist_v2')) || [];
+    // Los usuarios ahora viven en Firebase Authentication (contraseñas con hash).
+    // Se borran restos de la versión anterior que guardaba contraseñas en texto plano.
+    localStorage.removeItem('vv_users');
+    localStorage.removeItem('vv_current_user');
+    let currentUser = null;
     
-    let activeCoupon = null;
+    let activeCoupon = null; // { codigo, valor } leído de la colección "cupones"
+
+    // Revisa las reglas del cupón. Devuelve un mensaje de error o null si es válido.
+    function validarCupon(c, subtotal, yaUsado) {
+        if (!c) return 'Cupón inválido.';
+        if (!c.activo) return 'Este cupón ya no está activo.';
+        const hoy = new Date();
+        if (c.fecha_inicio && c.fecha_inicio.toDate && hoy < c.fecha_inicio.toDate()) return 'Este cupón todavía no está vigente.';
+        if (c.fecha_fin && c.fecha_fin.toDate && hoy > c.fecha_fin.toDate()) return 'Este cupón ya venció.';
+        if (c.limite_usos && (c.usos || 0) >= c.limite_usos) return 'Este cupón ya alcanzó su límite de usos.';
+        if (c.minimo_compra && subtotal < c.minimo_compra) return `Este cupón requiere una compra mínima de $${Number(c.minimo_compra).toFixed(2)} MXN.`;
+        if (c.un_uso_por_cliente && yaUsado) return 'Ya usaste este cupón en una compra anterior.';
+        return null;
+    }
+
+    function calcularDescuento(subtotal) {
+        if (!activeCoupon) return 0;
+        return Math.round(subtotal * activeCoupon.valor) / 100;
+    }
     let shippingCost = 0;
 
     // --- ELEMENTOS DOM ---
@@ -367,6 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabSignupBtn = document.getElementById('tab-signup-btn');
     const loginForm = document.getElementById('login-form');
     const signupForm = document.getElementById('signup-form');
+    const resetForm = document.getElementById('reset-form');
     const userActionContainer = document.getElementById('user-action-container');
     const mobileLoginItem = document.getElementById('mobile-login-item');
 
@@ -386,7 +151,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeThankyouBtn = document.getElementById('close-thankyou-btn');
 
     // --- INICIALIZACIÓN ---
-    renderProducts();
+    auth.onAuthStateChanged((user) => {
+        currentUser = user ? { uid: user.uid, name: user.displayName || user.email, email: user.email } : null;
+        updateUserHeaderUI();
+        if (user) asegurarPerfil(user);
+    });
+
+    // Crea el documento usuarios/{uid} si no existe (cuentas creadas antes)
+    async function asegurarPerfil(user, nombre) {
+        try {
+            const ref = db.collection('usuarios').doc(user.uid);
+            const snap = await ref.get();
+            if (snap.exists && snap.data().rol === 'admin' && currentUser && currentUser.uid === user.uid) {
+                currentUser.isAdmin = true;
+                updateUserHeaderUI();
+            }
+            if (!snap.exists) {
+                await ref.set({
+                    nombre: nombre || user.displayName || '',
+                    email: user.email,
+                    rol: 'cliente',
+                    estado: 'activo',
+                    fecha_registro: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            }
+        } catch (err) {
+            console.error('No se pudo guardar el perfil:', err);
+        }
+    }
+
+    cargarProductos();
     updateCartUI();
     updateWishlistUI();
     updateUserHeaderUI();
@@ -459,21 +253,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function attachProductEvents() {
         document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const id = parseInt(e.target.getAttribute('data-id'));
+                const id = e.currentTarget.getAttribute('data-id');
                 addToCart(id);
             });
         });
 
         document.querySelectorAll('.wishlist-toggle').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const id = parseInt(e.target.getAttribute('data-id'));
+                const id = e.currentTarget.getAttribute('data-id');
                 toggleWishlist(id);
             });
         });
 
         document.querySelectorAll('.quickview-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const id = parseInt(e.target.getAttribute('data-id'));
+                const id = e.currentTarget.getAttribute('data-id');
                 openQuickView(id);
             });
         });
@@ -529,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function saveCart() {
-        localStorage.setItem('vv_cart', JSON.stringify(cart));
+        localStorage.setItem('vv_cart_v2', JSON.stringify(cart));
     }
 
     function updateCartUI() {
@@ -566,9 +360,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        let discountVal = 0;
-        if (activeCoupon === 'PROFE100') {
-            discountVal = subtotal * 0.15;
+        let discountVal = calcularDescuento(subtotal);
+        if (discountVal > 0) {
             if (discountLine) discountLine.style.display = 'flex';
             if (cartDiscountEl) cartDiscountEl.textContent = discountVal.toFixed(2);
         } else {
@@ -638,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             wishlist.push(id);
         }
-        localStorage.setItem('vv_wishlist', JSON.stringify(wishlist));
+        localStorage.setItem('vv_wishlist_v2', JSON.stringify(wishlist));
         updateWishlistUI();
         renderProducts();
     }
@@ -676,14 +469,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document.querySelectorAll('.add-fav-to-cart').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const id = parseInt(e.target.getAttribute('data-id'));
+                const id = e.currentTarget.getAttribute('data-id');
                 addToCart(id);
             });
         });
 
         document.querySelectorAll('.remove-wish-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const id = parseInt(e.target.getAttribute('data-id'));
+                const id = e.currentTarget.getAttribute('data-id');
                 toggleWishlist(id);
             });
         });
@@ -739,6 +532,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tabSignupBtn.classList.remove('active');
             loginForm.classList.add('active-form');
             signupForm.classList.remove('active-form');
+            if (resetForm) resetForm.classList.remove('active-form');
         });
 
         tabSignupBtn.addEventListener('click', () => {
@@ -746,6 +540,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tabLoginBtn.classList.remove('active');
             signupForm.classList.add('active-form');
             loginForm.classList.remove('active-form');
+            if (resetForm) resetForm.classList.remove('active-form');
         });
     }
 
@@ -792,21 +587,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            if (users.find(u => u.email === email)) {
-                document.getElementById('signup-email-err').textContent = 'Este correo ya está registrado.';
-                return;
-            }
+            document.getElementById('signup-confirm-err').textContent = '';
+            document.getElementById('signup-email-err').textContent = '';
 
-            const newUser = { name, email, pass };
-            users.push(newUser);
-            localStorage.setItem('vv_users', JSON.stringify(users));
-
-            currentUser = newUser;
-            localStorage.setItem('vv_current_user', JSON.stringify(currentUser));
-
-            updateUserHeaderUI();
-            authModal.style.display = 'none';
-            signupForm.reset();
+            auth.createUserWithEmailAndPassword(email, pass)
+                .then((cred) => cred.user.updateProfile({ displayName: name }).then(() => cred.user))
+                .then((user) => asegurarPerfil(user, name).then(() => user))
+                .then((user) => {
+                    currentUser = { uid: user.uid, name, email: user.email };
+                    updateUserHeaderUI();
+                    authModal.style.display = 'none';
+                    signupForm.reset();
+                })
+                .catch((err) => {
+                    document.getElementById('signup-email-err').textContent = traducirErrorAuth(err.code);
+                });
         });
     }
 
@@ -817,20 +612,88 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('login-email').value.trim();
             const pass = document.getElementById('login-password').value;
 
-            const found = users.find(u => u.email === email && u.pass === pass);
+            document.getElementById('login-pass-err').textContent = '';
 
-            if (!found) {
-                document.getElementById('login-pass-err').textContent = 'Credenciales incorrectas.';
-                return;
-            }
-
-            currentUser = found;
-            localStorage.setItem('vv_current_user', JSON.stringify(currentUser));
-
-            updateUserHeaderUI();
-            authModal.style.display = 'none';
-            loginForm.reset();
+            auth.signInWithEmailAndPassword(email, pass)
+                .then(() => {
+                    authModal.style.display = 'none';
+                    loginForm.reset();
+                })
+                .catch((err) => {
+                    document.getElementById('login-pass-err').textContent = traducirErrorAuth(err.code);
+                });
         });
+    }
+
+    // --- RECUPERAR CONTRASEÑA ---
+    const forgotLink = document.getElementById('forgot-link');
+    const backToLogin = document.getElementById('back-to-login');
+
+    if (forgotLink && resetForm) {
+        forgotLink.addEventListener('click', () => {
+            loginForm.classList.remove('active-form');
+            signupForm.classList.remove('active-form');
+            resetForm.classList.add('active-form');
+            const loginEmail = document.getElementById('login-email').value.trim();
+            if (loginEmail) document.getElementById('reset-email').value = loginEmail;
+        });
+    }
+
+    if (backToLogin) {
+        backToLogin.addEventListener('click', () => {
+            resetForm.classList.remove('active-form');
+            loginForm.classList.add('active-form');
+            tabLoginBtn.classList.add('active');
+            tabSignupBtn.classList.remove('active');
+        });
+    }
+
+    if (resetForm) {
+        resetForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('reset-email').value.trim();
+            const msg = document.getElementById('reset-msg');
+            const btn = document.getElementById('reset-btn');
+            btn.disabled = true;
+            msg.style.color = '#555';
+            msg.textContent = 'Enviando...';
+
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    // Mismo mensaje exista o no la cuenta, para no revelar qué correos están registrados
+                    msg.style.color = '#27ae60';
+                    msg.textContent = 'Si el correo está registrado, te llegará un enlace. Revisa también tu carpeta de spam.';
+                })
+                .catch((err) => {
+                    if (err.code === 'auth/user-not-found') {
+                        msg.style.color = '#27ae60';
+                        msg.textContent = 'Si el correo está registrado, te llegará un enlace. Revisa también tu carpeta de spam.';
+                    } else {
+                        msg.style.color = '#e74c3c';
+                        msg.textContent = traducirErrorAuth(err.code);
+                    }
+                })
+                .finally(() => { btn.disabled = false; });
+        });
+    }
+
+    // Mensajes de error comprensibles para el usuario
+    function traducirErrorAuth(code) {
+        const mensajes = {
+            'auth/email-already-in-use': 'Este correo ya está registrado.',
+            'auth/invalid-email': 'El correo no tiene un formato válido.',
+            'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres.',
+            'auth/invalid-credential': 'Correo o contraseña incorrectos.',
+            'auth/wrong-password': 'Correo o contraseña incorrectos.',
+            'auth/user-not-found': 'Correo o contraseña incorrectos.',
+            'auth/too-many-requests': 'Demasiados intentos. Espera unos minutos.',
+            'auth/network-request-failed': 'Sin conexión. Revisa tu internet.',
+            'auth/missing-email': 'Escribe tu correo electrónico.',
+            'auth/operation-not-allowed': 'El inicio con correo no está activado en Firebase (Authentication > Sign-in method).',
+            'auth/configuration-not-found': 'Authentication no está configurado en Firebase. Actívalo en la consola.',
+            'auth/operation-not-supported-in-this-environment': 'Abre la página desde un servidor (Live Server o firebase serve), no con doble clic en el archivo.'
+        };
+        return mensajes[code] || `No se pudo completar la operación (${code}).`;
     }
 
     // Función unificada para actualizar el botón de sesión (PC y Móvil)
@@ -842,6 +705,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentUser) {
                 userActionContainer.innerHTML = `
                     <span style="font-size:13px; font-weight:600; color:#3A5A40; margin-right:5px;">Hola, ${firstName}</span>
+                    ${currentUser.isAdmin ? '<a href="admin.html" class="btn-auth-nav" style="text-decoration:none;">Panel</a>' : ''}
+                    <button type="button" class="btn-auth-nav" id="btn-orders-desktop">Mis pedidos</button>
                     <button type="button" class="btn-auth-nav" id="btn-logout-desktop">Salir</button>
                 `;
             } else {
@@ -854,7 +719,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 2. Render para menú móvil hamburguesa
         if (mobileLoginItem) {
             if (currentUser) {
-                mobileLoginItem.innerHTML = `<a href="javascript:void(0)" id="btn-logout-mobile">Cerrar Sesión (${firstName})</a>`;
+                mobileLoginItem.innerHTML = `${currentUser.isAdmin ? '<a href="admin.html">Panel administrativo</a>' : ''}<a href="javascript:void(0)" id="btn-orders-mobile">Mis pedidos</a><a href="javascript:void(0)" id="btn-logout-mobile">Cerrar Sesión (${firstName})</a>`;
             } else {
                 mobileLoginItem.innerHTML = `<a href="javascript:void(0)" id="btn-login-mobile">Iniciar Sesión</a>`;
             }
@@ -868,13 +733,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         const performLogout = () => {
-            auth.signOut().then(() => {
+            auth.signOut().finally(() => {
                 currentUser = null;
-                localStorage.removeItem('vv_current_user');
-                updateUserHeaderUI();
-            }).catch(() => {
-                currentUser = null;
-                localStorage.removeItem('vv_current_user');
                 updateUserHeaderUI();
             });
         };
@@ -888,6 +748,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btnLoginMobile) btnLoginMobile.addEventListener('click', openModal);
         if (btnLogoutDesktop) btnLogoutDesktop.addEventListener('click', performLogout);
         if (btnLogoutMobile) btnLogoutMobile.addEventListener('click', performLogout);
+        const btnOrdersDesktop = document.getElementById('btn-orders-desktop');
+        const btnOrdersMobile = document.getElementById('btn-orders-mobile');
+        const openOrders = () => {
+            const menuCheckbox = document.getElementById('menu');
+            if (menuCheckbox) menuCheckbox.checked = false;
+            abrirMisPedidos();
+        };
+        if (btnOrdersDesktop) btnOrdersDesktop.addEventListener('click', openOrders);
+        if (btnOrdersMobile) btnOrdersMobile.addEventListener('click', openOrders);
     }
 
     // --- 6. CHECKOUT & PROCESO DE PAGO ---
@@ -906,6 +775,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             cartModal.style.display = 'none';
+            irAlPaso1();
             checkoutModal.style.display = 'flex';
             updateCheckoutTotals();
         });
@@ -928,20 +798,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Cupón PROFE100
+    // Cupón: se valida contra la colección "cupones" de Firestore
     if (applyCouponBtn) {
-        applyCouponBtn.addEventListener('click', () => {
+        applyCouponBtn.addEventListener('click', async () => {
             const code = document.getElementById('coupon-code').value.trim().toUpperCase();
             const msg = document.getElementById('coupon-msg');
+            if (!code) return;
+            msg.style.color = '#555';
+            msg.textContent = 'Validando cupón...';
 
-            if (code === 'PROFE100') {
-                activeCoupon = 'PROFE100';
-                msg.style.color = '#27ae60';
-                msg.textContent = '¡Cupón PROFE100 aplicado! 15% de descuento.';
-            } else {
+            try {
+                const snap = await db.collection('cupones').doc(code).get();
+                const c = snap.exists ? snap.data() : null;
+                let yaUsado = false;
+                if (c && c.un_uso_por_cliente && auth.currentUser) {
+                    const uso = await db.collection('cupones').doc(code).collection('usos').doc(auth.currentUser.uid).get();
+                    yaUsado = uso.exists;
+                }
+                const subtotal = cart.reduce((acc, i) => acc + (i.price * i.quantity), 0);
+                const error = validarCupon(c, subtotal, yaUsado);
+                if (!error) {
+                    activeCoupon = { codigo: code, valor: c.valor };
+                    msg.style.color = '#27ae60';
+                    msg.textContent = `¡Cupón ${code} aplicado! ${c.valor}% de descuento.`;
+                } else {
+                    activeCoupon = null;
+                    msg.style.color = '#e74c3c';
+                    msg.textContent = error;
+                }
+            } catch (err) {
                 activeCoupon = null;
                 msg.style.color = '#e74c3c';
-                msg.textContent = 'Cupón inválido.';
+                msg.textContent = 'No se pudo validar el cupón.';
             }
 
             updateCartUI();
@@ -951,12 +839,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateCheckoutTotals() {
         let subtotal = cart.reduce((acc, i) => acc + (i.price * i.quantity), 0);
-        let discount = activeCoupon === 'PROFE100' ? (subtotal * 0.15) : 0;
+        let discount = calcularDescuento(subtotal);
         let finalTotal = subtotal - discount + shippingCost;
 
-        if (finalTotalCheckout) {
-            finalTotalCheckout.textContent = finalTotal.toFixed(2);
-        }
+        if (finalTotalCheckout) finalTotalCheckout.textContent = finalTotal.toFixed(2);
+        const sub = document.getElementById('sum-subtotal');
+        const dis = document.getElementById('sum-discount');
+        const shp = document.getElementById('sum-shipping');
+        if (sub) sub.textContent = subtotal.toFixed(2);
+        if (dis) dis.textContent = discount.toFixed(2);
+        if (shp) shp.textContent = shippingCost.toFixed(2);
     }
 
     if (nextToStep2Btn) {
@@ -968,6 +860,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Por favor completa la dirección y el código postal.');
                 return;
             }
+            if (shippingCost === 0) {
+                alert('Calcula el costo de envío antes de continuar.');
+                return;
+            }
+            updateCheckoutTotals();
 
             step1Form.classList.remove('active-step');
             step2Form.classList.add('active-step');
@@ -976,53 +873,455 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (backToStep1Btn) {
-        backToStep1Btn.addEventListener('click', () => {
-            step2Form.classList.remove('active-step');
-            step1Form.classList.add('active-step');
-            document.getElementById('step2-indicator').classList.remove('active');
-            document.getElementById('step1-indicator').classList.add('active');
-        });
+    // Siempre que se abre el checkout empieza en el paso 1
+    function irAlPaso1() {
+        step2Form.classList.remove('active-step');
+        step1Form.classList.add('active-step');
+        document.getElementById('step2-indicator').classList.remove('active');
+        document.getElementById('step1-indicator').classList.add('active');
     }
+
+    if (backToStep1Btn) backToStep1Btn.addEventListener('click', irAlPaso1);
+
+    let procesandoPedido = false; // evita doble clic / doble envío
 
     if (step2Form) {
         step2Form.addEventListener('submit', (e) => {
             e.preventDefault();
+            if (procesandoPedido) return;
 
+            const acceptTerms = document.getElementById('accept-terms');
+            const termsErr = document.getElementById('terms-err');
+            if (acceptTerms && !acceptTerms.checked) {
+                if (termsErr) termsErr.textContent = 'Debes aceptar los términos y el aviso de privacidad para continuar.';
+                return;
+            }
+            if (termsErr) termsErr.textContent = '';
+
+            procesandoPedido = true;
+            const confirmBtn = document.getElementById('confirm-payment-btn');
             const btnText = document.getElementById('btn-text');
             const btnSpinner = document.getElementById('btn-spinner');
-
+            if (confirmBtn) confirmBtn.disabled = true;
             if (btnText) btnText.style.display = 'none';
             if (btnSpinner) btnSpinner.style.display = 'inline-block';
 
-            setTimeout(() => {
+            const metodo = document.getElementById('payment-method').value;
+
+            const terminarCarga = () => {
+                procesandoPedido = false;
+                if (confirmBtn) confirmBtn.disabled = false;
                 if (btnText) btnText.style.display = 'inline';
                 if (btnSpinner) btnSpinner.style.display = 'none';
+            };
 
-                const orderNum = 'ORD-' + Math.floor(10000 + Math.random() * 90000);
-                const orderDisplay = document.getElementById('order-number-display');
-                if (orderDisplay) orderDisplay.textContent = orderNum;
+            // Simulación de la pasarela de pago
+            setTimeout(async () => {
+                if (metodo === 'sandbox-rechazado') {
+                    terminarCarga();
+                    alert('Pago de prueba rechazado. No se generó el pedido y tu carrito se conserva.');
+                    return;
+                }
 
-                cart.forEach(cartItem => {
-                    const prod = productsDB.find(p => p.id === cartItem.id);
-                    if (prod) prod.stock -= cartItem.quantity;
-                });
+                try {
+                    const folio = await crearPedido();
 
-                cart = [];
-                saveCart();
-                updateCartUI();
-                renderProducts();
+                    const orderDisplay = document.getElementById('order-number-display');
+                    if (orderDisplay) orderDisplay.textContent = folio;
 
-                checkoutModal.style.display = 'none';
-                thankyouModal.style.display = 'flex';
-            }, 2000);
+                    cart = [];
+                    activeCoupon = null;
+                    shippingCost = 0;
+                    if (acceptTerms) acceptTerms.checked = false;
+                    saveCart();
+                    await cargarProductos(); // stock actualizado desde la BD
+
+                    checkoutModal.style.display = 'none';
+                    thankyouModal.style.display = 'flex';
+                } catch (err) {
+                    console.error(err);
+                    if (err.message && err.message.startsWith('SIN_STOCK')) {
+                        const [, nombre, disponible] = err.message.split('|');
+                        alert(`No hay suficiente stock de "${nombre}". Disponibles: ${disponible}. Ajusta tu carrito.`);
+                        await cargarProductos();
+                    } else if (err.message && err.message.startsWith('CUPON|')) {
+                        alert(err.message.split('|')[1] + ' Se quitó el cupón; revisa tu total e intenta de nuevo.');
+                        activeCoupon = null;
+                        const cm = document.getElementById('coupon-msg');
+                        if (cm) cm.textContent = '';
+                        updateCartUI();
+                        updateCheckoutTotals();
+                    } else if (err.message && err.message.startsWith('NO_EXISTE')) {
+                        alert('Un producto de tu carrito ya no está disponible. Elimínalo e intenta de nuevo.');
+                    } else {
+                        alert('No se pudo registrar el pedido. Intenta de nuevo. (' + (err.code || err.message) + ')');
+                    }
+                } finally {
+                    terminarCarga();
+                }
+            }, 1500);
         });
     }
+
+    // Guarda pedido, detalle, envío y movimientos de inventario en UNA transacción.
+    // Los precios y el stock se leen de Firestore, no del carrito del navegador.
+    async function crearPedido() {
+        const user = auth.currentUser;
+        if (!user) throw new Error('SIN_SESION');
+
+        const folio = 'VV-' + Date.now().toString(36).toUpperCase();
+        const direccion = document.getElementById('chk-address').value.trim();
+        const cp = document.getElementById('chk-zip').value.trim();
+        const consent = JSON.parse(localStorage.getItem('vv_consent') || 'null');
+
+        await db.runTransaction(async (tx) => {
+            // 1) LECTURAS (Firestore exige leer todo antes de escribir)
+            const refs = cart.map(item => db.collection('productos').doc(item.id));
+            const snaps = await Promise.all(refs.map(r => tx.get(r)));
+
+            let cuponData = null, cuponRef = null, usoRef = null, yaUsado = false;
+            if (activeCoupon) {
+                cuponRef = db.collection('cupones').doc(activeCoupon.codigo);
+                usoRef = cuponRef.collection('usos').doc(user.uid);
+                const cSnap = await tx.get(cuponRef);
+                cuponData = cSnap.exists ? cSnap.data() : null;
+                if (cuponData && cuponData.un_uso_por_cliente) yaUsado = (await tx.get(usoRef)).exists;
+            }
+
+            // 2) VALIDAR stock y calcular importes con datos de la BD
+            let subtotal = 0;
+            const partidas = snaps.map((snap, i) => {
+                if (!snap.exists) throw new Error('NO_EXISTE|' + cart[i].name);
+                const d = snap.data();
+                const cantidad = cart[i].quantity;
+                if (d.stock < cantidad) throw new Error(`SIN_STOCK|${d.nombre}|${d.stock}`);
+                subtotal += d.precio * cantidad;
+                return { ref: refs[i], d, cantidad };
+            });
+
+            // Se vuelve a validar el cupón con los precios reales de la BD
+            if (cuponData) {
+                const errorCupon = validarCupon(cuponData, subtotal, yaUsado);
+                if (errorCupon) throw new Error('CUPON|' + errorCupon);
+            }
+            const descuento = cuponData ? Math.round(subtotal * cuponData.valor) / 100 : 0;
+            const total = subtotal - descuento + shippingCost;
+            const ahora = firebase.firestore.FieldValue.serverTimestamp();
+            const pedidoRef = db.collection('pedidos').doc();
+
+            // 3) ESCRITURAS
+            tx.set(pedidoRef, {
+                folio,
+                id_usuario: user.uid,
+                email: user.email,
+                direccion_envio: { direccion, cp },
+                subtotal,
+                cupon: cuponData ? activeCoupon.codigo : null,
+                descuento,
+                costo_envio: shippingCost,
+                total,
+                moneda: 'MXN',
+                estado: 'pagado',
+                pago: { metodo: 'simulado', estado: 'aprobado', referencia: 'SIM-' + folio },
+                aceptacion_terminos: {
+                    version: consent ? consent.version : '1.0',
+                    fecha_aceptacion: consent ? consent.fecha : new Date().toISOString()
+                },
+                fecha: ahora
+            });
+
+            if (cuponData) {
+                tx.update(cuponRef, { usos: (cuponData.usos || 0) + 1 });
+                if (cuponData.un_uso_por_cliente) {
+                    tx.set(usoRef, { id_pedido: pedidoRef.id, folio, fecha: ahora });
+                }
+            }
+
+            partidas.forEach(({ ref, d, cantidad }) => {
+                const nuevoStock = d.stock - cantidad;
+                tx.update(ref, { stock: nuevoStock });
+
+                // Copia (snapshot) del producto para conservar el historial
+                tx.set(db.collection('detalle_pedido').doc(), {
+                    id_pedido: pedidoRef.id,
+                    folio,
+                    id_usuario: user.uid,
+                    id_producto: ref.id,
+                    sku: d.sku || '',
+                    nombre: d.nombre,
+                    precio_unitario: d.precio,
+                    cantidad,
+                    importe: d.precio * cantidad
+                });
+
+                tx.set(db.collection('movimientos_inventario').doc(), {
+                    id_producto: ref.id,
+                    tipo: 'salida',
+                    cantidad,
+                    stock_anterior: d.stock,
+                    stock_nuevo: nuevoStock,
+                    motivo: 'venta',
+                    referencia: folio,
+                    id_usuario: user.uid,
+                    fecha: ahora
+                });
+            });
+
+            tx.set(db.collection('envios').doc(), {
+                id_pedido: pedidoRef.id,
+                folio,
+                id_usuario: user.uid,
+                cp,
+                costo: shippingCost,
+                paqueteria: null,
+                guia: null,
+                estado: 'pendiente',
+                fecha: ahora
+            });
+        });
+
+        return folio;
+    }
+
+    // --- MIS PEDIDOS (historial del cliente) ---
+    const ordersModal = document.getElementById('orders-modal');
+    const closeOrders = document.getElementById('close-orders');
+    const ordersList = document.getElementById('orders-list');
+
+    // Escapa texto antes de ponerlo en HTML (evita inyección de código)
+    function escHTML(v) {
+        return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    const PLAZO_DEVOLUCION_DIAS = 30;      // macetas, herramientas y accesorios
+    const ESTADOS_CANCELABLES = ['pagado', 'preparando'];
+    const ETIQUETA_SOLICITUD = {
+        solicitada: 'En revisión', aprobada: 'Aprobada', rechazada: 'Rechazada', completada: 'Completada'
+    };
+    let misDatos = { pedidos: [], detalles: [], solicitudes: [], envios: [] };
+
+    async function abrirMisPedidos() {
+        if (!auth.currentUser || !ordersModal) return;
+        ordersModal.style.display = 'flex';
+        ordersList.innerHTML = '<p style="color:#777;">Cargando pedidos...</p>';
+        const uid = auth.currentUser.uid;
+        try {
+            const [sp, sd, ss, se] = await Promise.all([
+                db.collection('pedidos').where('id_usuario', '==', uid).get(),
+                db.collection('detalle_pedido').where('id_usuario', '==', uid).get(),
+                db.collection('devoluciones').where('id_usuario', '==', uid).get(),
+                db.collection('envios').where('id_usuario', '==', uid).get()
+            ]);
+            misDatos = {
+                pedidos: sp.docs.map(d => ({ id: d.id, ...d.data() }))
+                    .sort((a, b) => (b.fecha?.seconds || 0) - (a.fecha?.seconds || 0)),
+                detalles: sd.docs.map(d => d.data()),
+                solicitudes: ss.docs.map(d => ({ id: d.id, ...d.data() }))
+                    .sort((a, b) => (b.fecha?.seconds || 0) - (a.fecha?.seconds || 0)),
+                envios: se.docs.map(d => d.data())
+            };
+            pintarMisPedidos();
+        } catch (err) {
+            ordersList.innerHTML = '<p style="color:#e74c3c;">No se pudieron cargar tus pedidos.</p>';
+            console.error(err);
+        }
+    }
+
+    function pintarMisPedidos() {
+        if (!misDatos.pedidos.length) {
+            ordersList.innerHTML = '<p style="color:#777;">Todavía no tienes pedidos.</p>';
+            return;
+        }
+        ordersList.innerHTML = misDatos.pedidos.map(p => {
+            const sol = misDatos.solicitudes.find(s => s.id_pedido === p.id);
+            const envio = misDatos.envios.find(e => e.id_pedido === p.id);
+            let acciones = '';
+
+            if (sol) {
+                acciones = `
+                    <div style="background:#f6f6f3; border-radius:8px; padding:8px 10px; margin-top:8px; font-size:12px;">
+                        <strong>${sol.tipo === 'cancelacion' ? 'Cancelación' : 'Devolución'} ${escHTML(sol.folio)}:</strong>
+                        ${escHTML(ETIQUETA_SOLICITUD[sol.estado] || sol.estado)}
+                        ${sol.respuesta ? `<br>Respuesta: ${escHTML(sol.respuesta)}` : ''}
+                        ${sol.monto_reembolso ? `<br>Reembolso: $${Number(sol.monto_reembolso).toFixed(2)} MXN` : ''}
+                    </div>`;
+            }
+            const puedeSolicitar = !sol || sol.estado === 'rechazada';
+            if (puedeSolicitar && ESTADOS_CANCELABLES.includes(p.estado)) {
+                acciones += `<button type="button" class="btn-auth-nav" data-solicitar="cancelacion" data-pid="${escHTML(p.id)}" style="margin-top:8px;">Solicitar cancelación</button>`;
+            }
+            if (puedeSolicitar && p.estado === 'entregado') {
+                const entrega = envio && envio.fecha_entrega && envio.fecha_entrega.toDate ? envio.fecha_entrega.toDate() : null;
+                const dias = entrega ? (Date.now() - entrega.getTime()) / 86400000 : 0;
+                if (dias <= PLAZO_DEVOLUCION_DIAS) {
+                    acciones += `<button type="button" class="btn-auth-nav" data-solicitar="devolucion" data-pid="${escHTML(p.id)}" style="margin-top:8px;">Solicitar devolución</button>`;
+                } else {
+                    acciones += `<p style="font-size:12px; color:#777; margin-top:6px;">El plazo de devolución terminó. Para garantías escribe a atención al cliente.</p>`;
+                }
+            }
+            const guia = envio && envio.guia ? `<br>Envío: ${escHTML(envio.paqueteria)} · Guía ${escHTML(envio.guia)}` : '';
+
+            return `
+                <div style="border:1px solid #eee; border-radius:10px; padding:12px; margin-bottom:10px; text-align:left;">
+                    <strong style="color:#3A5A40;">${escHTML(p.folio)}</strong>
+                    <span style="float:right; font-size:12px; background:#e3ebe1; padding:2px 10px; border-radius:10px;">${escHTML(p.estado)}</span>
+                    <p style="font-size:13px; color:#555; margin:4px 0 0;">
+                        ${p.fecha && p.fecha.toDate ? p.fecha.toDate().toLocaleString('es-MX') : 'Procesando...'}<br>
+                        Total: $${Number(p.total).toFixed(2)} MXN${guia}
+                    </p>
+                    ${acciones}
+                </div>`;
+        }).join('');
+
+        ordersList.querySelectorAll('[data-solicitar]').forEach(btn =>
+            btn.addEventListener('click', () => abrirSolicitud(btn.dataset.pid, btn.dataset.solicitar)));
+    }
+
+    // --- SOLICITUD DE CANCELACIÓN O DEVOLUCIÓN ---
+    const returnModal = document.getElementById('return-modal');
+    const returnForm = document.getElementById('return-form');
+    let solicitudPedido = null, solicitudTipo = null;
+
+    const MOTIVOS = {
+        cancelacion: [
+            ['cambio de opinion', 'Ya no lo necesito / cambié de opinión'],
+            ['error en el pedido', 'Me equivoqué de producto o cantidad'],
+            ['error en direccion', 'La dirección de entrega es incorrecta'],
+            ['otro', 'Otro motivo']
+        ],
+        devolucion: [
+            ['danado en transporte', 'Llegó dañado por el transporte'],
+            ['defectuoso', 'Producto defectuoso / planta enferma o marchita'],
+            ['incorrecto', 'Recibí un producto diferente'],
+            ['incompleto', 'Faltan productos en mi pedido'],
+            ['arrepentimiento', 'Cambié de opinión (el envío de regreso lo pago yo)']
+        ]
+    };
+
+    function abrirSolicitud(pedidoId, tipo) {
+        solicitudPedido = misDatos.pedidos.find(p => p.id === pedidoId);
+        solicitudTipo = tipo;
+        if (!solicitudPedido) return;
+        const partidas = misDatos.detalles.filter(d => d.id_pedido === pedidoId);
+
+        document.getElementById('return-title').textContent =
+            (tipo === 'cancelacion' ? 'Cancelar pedido ' : 'Devolver productos del pedido ') + solicitudPedido.folio;
+        document.getElementById('return-motivo').innerHTML =
+            '<option value="">Selecciona un motivo</option>' +
+            MOTIVOS[tipo].map(([v, t]) => `<option value="${v}">${t}</option>`).join('');
+        document.getElementById('return-descripcion').value = '';
+        document.getElementById('return-err').textContent = '';
+
+        const wrap = document.getElementById('return-productos');
+        if (tipo === 'devolucion') {
+            wrap.style.display = 'block';
+            wrap.innerHTML = '<p style="font-size:13px; font-weight:600; margin-bottom:6px;">¿Qué productos quieres devolver?</p>' +
+                partidas.map((d, i) => `
+                    <label style="display:flex; gap:8px; align-items:center; font-size:13px; margin-bottom:6px; cursor:pointer;">
+                        <input type="checkbox" value="${i}" style="width:auto;">
+                        ${escHTML(d.cantidad)} × ${escHTML(d.nombre)} ($${Number(d.importe).toFixed(2)})
+                    </label>`).join('');
+            wrap.dataset.partidas = JSON.stringify(partidas);
+        } else {
+            wrap.style.display = 'none';
+            wrap.innerHTML = '';
+            wrap.dataset.partidas = JSON.stringify(partidas);
+        }
+        document.getElementById('return-aviso').innerHTML = tipo === 'cancelacion'
+            ? 'Si se aprueba, recibirás el reembolso total al mismo medio de pago en 5 a 10 días hábiles.'
+            : 'Para plantas, repórtalo dentro de las primeras 72 horas. Envía fotos a soporte@verdevida-demo.mx indicando tu folio. Consulta la <a href="politicas.html#devoluciones" target="_blank">política de devoluciones</a>.';
+        returnModal.style.display = 'flex';
+    }
+
+    if (returnForm) {
+        returnForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const err = document.getElementById('return-err');
+            const motivo = document.getElementById('return-motivo').value;
+            const descripcion = document.getElementById('return-descripcion').value.trim();
+            const wrap = document.getElementById('return-productos');
+            const todas = JSON.parse(wrap.dataset.partidas || '[]');
+
+            let partidas = todas;
+            if (solicitudTipo === 'devolucion') {
+                const marcadas = [...wrap.querySelectorAll('input:checked')].map(c => Number(c.value));
+                partidas = marcadas.map(i => todas[i]);
+                if (!partidas.length) { err.textContent = 'Selecciona al menos un producto.'; return; }
+            }
+            if (!motivo) { err.textContent = 'Selecciona un motivo.'; return; }
+            if (descripcion.length < 10) { err.textContent = 'Describe el problema (mínimo 10 caracteres).'; return; }
+
+            const btn = document.getElementById('return-submit');
+            btn.disabled = true;
+            err.textContent = '';
+            const prefijo = solicitudTipo === 'cancelacion' ? 'CAN-' : 'DEV-';
+            const folio = prefijo + Date.now().toString(36).toUpperCase();
+            try {
+                await db.collection('devoluciones').add({
+                    folio,
+                    tipo: solicitudTipo,
+                    id_pedido: solicitudPedido.id,
+                    folio_pedido: solicitudPedido.folio,
+                    id_usuario: auth.currentUser.uid,
+                    email: auth.currentUser.email,
+                    partidas: partidas.map(d => ({
+                        id_producto: d.id_producto, nombre: d.nombre, sku: d.sku || '',
+                        cantidad: d.cantidad, importe: d.importe
+                    })),
+                    motivo,
+                    descripcion,
+                    estado: 'solicitada',
+                    historial: [{ estado: 'solicitada', fecha: new Date().toISOString(), nota: 'Solicitud del cliente' }],
+                    fecha: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                returnModal.style.display = 'none';
+                alert(`Tu solicitud ${folio} fue registrada. Te responderemos en un máximo de 3 días hábiles. Puedes ver su estado en "Mis pedidos".`);
+                await abrirMisPedidos();
+            } catch (ex) {
+                console.error(ex);
+                err.textContent = 'No se pudo enviar la solicitud. Intenta de nuevo.';
+            } finally {
+                btn.disabled = false;
+            }
+        });
+    }
+    const closeReturn = document.getElementById('close-return');
+    if (closeReturn) closeReturn.addEventListener('click', () => returnModal.style.display = 'none');
+
+    if (closeOrders) closeOrders.addEventListener('click', () => ordersModal.style.display = 'none');
 
     if (closeThankyouBtn) {
         closeThankyouBtn.addEventListener('click', () => {
             thankyouModal.style.display = 'none';
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // --- AVISO INICIAL DE TÉRMINOS Y PRIVACIDAD ---
+    const TERMS_VERSION = '1.0';
+    const consentModal = document.getElementById('consent-modal');
+    const consentBtn = document.getElementById('consent-accept-btn');
+    const consentCheck = document.getElementById('consent-check');
+
+    let consentSaved = null;
+    try { consentSaved = JSON.parse(localStorage.getItem('vv_consent')); } catch (err) { consentSaved = null; }
+
+    if (consentModal && (!consentSaved || consentSaved.version !== TERMS_VERSION)) {
+        consentModal.style.display = 'flex';
+    }
+
+    if (consentBtn) {
+        consentBtn.addEventListener('click', () => {
+            if (!consentCheck.checked) {
+                document.getElementById('consent-err').textContent = 'Marca la casilla para continuar.';
+                return;
+            }
+            // Evidencia de aceptación: versión y fecha/hora
+            localStorage.setItem('vv_consent', JSON.stringify({
+                version: TERMS_VERSION,
+                fecha: new Date().toISOString()
+            }));
+            consentModal.style.display = 'none';
         });
     }
 
@@ -1034,5 +1333,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === authModal) authModal.style.display = 'none';
         if (e.target === checkoutModal) checkoutModal.style.display = 'none';
         if (e.target === thankyouModal) thankyouModal.style.display = 'none';
+        if (e.target === ordersModal) ordersModal.style.display = 'none';
+        if (e.target === returnModal) returnModal.style.display = 'none';
     });
 });
