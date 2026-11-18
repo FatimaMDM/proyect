@@ -1,8 +1,7 @@
-// =========================================================
 // admin.js  |  Panel administrativo de Verde Vida
 // Lee y escribe en Firestore. Solo funciona para usuarios con
 // rol "admin" (lo validan esta página Y las reglas de Firestore).
-// =========================================================
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyBdQgR-W1GMyzyMyzCX2qUf2UkEHRHMH1Q",
@@ -800,6 +799,141 @@ $('form-cupon').addEventListener('submit', async (e) => {
         console.error(err);
         mostrarMsg(msg, 'No se pudo guardar: ' + err.message, 'error');
         $('pc-guardar').disabled = false;
+    }
+});
+
+// ---------- Respaldo y restauración ----------
+const COLECCIONES_RESPALDO = ['usuarios', 'categorias', 'productos', 'cupones', 'pedidos', 'detalle_pedido',
+    'envios', 'devoluciones', 'movimientos_inventario', 'audit_logs'];
+const SOLO_AGREGAR = ['movimientos_inventario', 'audit_logs'];   // bitácoras: nunca se modifican
+
+// Las fechas de Firestore se guardan como {"__ts": segundos, "ns": nanosegundos}
+function aJSON(v) {
+    if (v && typeof v.toDate === 'function' && 'seconds' in v) return { __ts: v.seconds, ns: v.nanoseconds || 0 };
+    if (Array.isArray(v)) return v.map(aJSON);
+    if (v && typeof v === 'object') { const o = {}; for (const k in v) o[k] = aJSON(v[k]); return o; }
+    return v;
+}
+function deJSON(v) {
+    if (v && typeof v === 'object' && '__ts' in v) return new firebase.firestore.Timestamp(v.__ts, v.ns || 0);
+    if (Array.isArray(v)) return v.map(deJSON);
+    if (v && typeof v === 'object') { const o = {}; for (const k in v) o[k] = deJSON(v[k]); return o; }
+    return v;
+}
+
+$('btn-respaldo').addEventListener('click', async () => {
+    const msg = $('respaldo-msg');
+    $('btn-respaldo').disabled = true;
+    mostrarMsg(msg, 'Leyendo la base de datos...');
+    try {
+        const datos = {}, conteos = {};
+        for (const c of COLECCIONES_RESPALDO) {
+            const snap = await db.collection(c).get();
+            datos[c] = {};
+            snap.docs.forEach(d => { datos[c][d.id] = aJSON(d.data()); });
+            conteos[c] = snap.docs.length;
+        }
+        // Subcolección de usos de cada cupón
+        datos['cupones_usos'] = {};
+        let usos = 0;
+        for (const id of Object.keys(datos.cupones)) {
+            const snap = await db.collection('cupones').doc(id).collection('usos').get();
+            if (snap.docs.length) {
+                datos['cupones_usos'][id] = {};
+                snap.docs.forEach(d => { datos['cupones_usos'][id][d.id] = aJSON(d.data()); usos++; });
+            }
+        }
+        conteos['cupones_usos'] = usos;
+
+        const ahora = new Date();
+        const respaldo = {
+            sistema: 'Verde Vida', version_respaldo: 1, proyecto: firebaseConfig.projectId,
+            fecha: ahora.toISOString(), creado_por: adminUser.email, conteos, datos
+        };
+        const pad = n => String(n).padStart(2, '0');
+        const nombre = `verdevida_respaldo_${ahora.getFullYear()}-${pad(ahora.getMonth() + 1)}-${pad(ahora.getDate())}_${pad(ahora.getHours())}${pad(ahora.getMinutes())}.json`;
+        const blob = new Blob([JSON.stringify(respaldo, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = nombre;
+        a.click();
+        URL.revokeObjectURL(a.href);
+
+        const total = Object.values(conteos).reduce((x, y) => x + y, 0);
+        await registrarAuditoria('respaldo', 'base de datos', nombre, `${total} documentos`);
+        mostrarMsg(msg, `Respaldo descargado: ${nombre} (${total} documentos).`, 'ok');
+    } catch (err) {
+        console.error(err);
+        mostrarMsg(msg, 'No se pudo generar el respaldo: ' + err.message, 'error');
+    } finally {
+        $('btn-respaldo').disabled = false;
+    }
+});
+
+let respaldoCargado = null;
+$('archivo-respaldo').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    respaldoCargado = null;
+    $('btn-restaurar').disabled = true;
+    $('confirmar-wrap').style.display = 'none';
+    mostrarMsg($('restaurar-msg'), '');
+    if (!file) { $('resumen-respaldo').innerHTML = ''; return; }
+    try {
+        const r = JSON.parse(await file.text());
+        if (r.sistema !== 'Verde Vida' || !r.datos) throw new Error('El archivo no es un respaldo de Verde Vida.');
+        if (r.proyecto !== firebaseConfig.projectId) throw new Error(`El respaldo es del proyecto ${r.proyecto}, no de ${firebaseConfig.projectId}.`);
+        respaldoCargado = r;
+        $('resumen-respaldo').innerHTML = `<strong>Respaldo del ${esc(new Date(r.fecha).toLocaleString('es-MX'))}</strong> (hecho por ${esc(r.creado_por)}):<br>` +
+            Object.entries(r.conteos).map(([c, n]) => `${esc(c)}: ${esc(n)}`).join(' · ');
+        $('confirmar-wrap').style.display = 'block';
+        $('confirmar-restaurar').value = '';
+    } catch (err) {
+        $('resumen-respaldo').innerHTML = '';
+        mostrarMsg($('restaurar-msg'), err.message.startsWith('El ') ? err.message : 'No se pudo leer el archivo: ' + err.message, 'error');
+    }
+});
+$('confirmar-restaurar').addEventListener('input', () => {
+    $('btn-restaurar').disabled = !(respaldoCargado && $('confirmar-restaurar').value.trim() === 'RESTAURAR');
+});
+
+$('btn-restaurar').addEventListener('click', async () => {
+    const r = respaldoCargado;
+    const msg = $('restaurar-msg');
+    $('btn-restaurar').disabled = true;
+    try {
+        // Lista de escrituras: [referencia, datos]
+        const escrituras = [];
+        for (const c of COLECCIONES_RESPALDO) {
+            const docs = r.datos[c] || {};
+            let existentes = new Set();
+            if (SOLO_AGREGAR.includes(c)) {
+                existentes = new Set((await db.collection(c).get()).docs.map(d => d.id));
+            }
+            for (const id of Object.keys(docs)) {
+                if (existentes.has(id)) continue;
+                escrituras.push([db.collection(c).doc(id), deJSON(docs[id])]);
+            }
+        }
+        for (const cup of Object.keys(r.datos.cupones_usos || {})) {
+            for (const uid of Object.keys(r.datos.cupones_usos[cup])) {
+                escrituras.push([db.collection('cupones').doc(cup).collection('usos').doc(uid), deJSON(r.datos.cupones_usos[cup][uid])]);
+            }
+        }
+        // Firestore acepta hasta 500 escrituras por lote
+        for (let i = 0; i < escrituras.length; i += 400) {
+            const lote = db.batch();
+            escrituras.slice(i, i + 400).forEach(([ref, d]) => lote.set(ref, d));
+            mostrarMsg(msg, `Restaurando... ${Math.min(i + 400, escrituras.length)} de ${escrituras.length}`);
+            await lote.commit();
+        }
+        await registrarAuditoria('restauracion', 'base de datos', r.fecha, `${escrituras.length} documentos desde respaldo de ${r.fecha}`);
+        await cargarTodo();
+        mostrarMsg(msg, `Restauración terminada: ${escrituras.length} documentos escritos. Revisa productos y pedidos.`, 'ok');
+        $('confirmar-restaurar').value = '';
+    } catch (err) {
+        console.error(err);
+        mostrarMsg(msg, 'La restauración se detuvo: ' + err.message, 'error');
+        $('btn-restaurar').disabled = false;
     }
 });
 

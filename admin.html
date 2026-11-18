@@ -35,6 +35,7 @@
         <button class="adm-tab" data-tab="cupones" role="tab">Cupones</button>
         <button class="adm-tab" data-tab="clientes" role="tab">Clientes</button>
         <button class="adm-tab" data-tab="reportes" role="tab">Reportes</button>
+        <button class="adm-tab" data-tab="respaldo" role="tab">Respaldo</button>
     </nav>
 
     <main class="adm-main">
@@ -164,6 +165,21 @@
                 <thead><tr><th>Fecha</th><th>Quién</th><th>Acción</th><th>Entidad</th><th>Detalle</th></tr></thead>
                 <tbody id="tabla-auditoria"></tbody>
             </table></div>
+        </section>
+        <!-- RESPALDO -->
+        <section class="adm-panel" id="tab-respaldo">
+            <h2>Respaldo y restauración</h2>
+            <p style="font-size:14px; color:var(--suave); margin-bottom:15px;">Descarga una copia de todas las colecciones en un archivo JSON. Guárdala fuera de esta computadora (Drive, USB). Haz un respaldo antes de cualquier cambio grande y al menos una vez por semana.</p>
+            <button class="btn btn-primario" id="btn-respaldo">Descargar respaldo</button>
+            <p class="msg" id="respaldo-msg"></p>
+
+            <h3>Restaurar desde un respaldo</h3>
+            <div class="aviso">La restauración vuelve a escribir cada documento del archivo con los datos que tenía al respaldarse. No borra documentos creados después del respaldo. Las bitácoras (movimientos e auditoría) solo se completan: nunca se modifican.</div>
+            <div class="campo"><label for="archivo-respaldo">Archivo de respaldo (.json)</label><input type="file" id="archivo-respaldo" accept="application/json,.json"></div>
+            <div id="resumen-respaldo" style="font-size:13px; margin-bottom:10px;"></div>
+            <div class="campo" id="confirmar-wrap" style="display:none;"><label for="confirmar-restaurar">Para confirmar escribe RESTAURAR</label><input id="confirmar-restaurar" autocomplete="off"></div>
+            <button class="btn btn-peligro" id="btn-restaurar" disabled>Restaurar</button>
+            <p class="msg" id="restaurar-msg"></p>
         </section>
     </main>
 </div>
@@ -295,6 +311,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="admin.js?v=1.1"></script>
+<script src="admin.js?v=1.2"></script>
 </body>
 </html>

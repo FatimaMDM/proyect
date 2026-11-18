@@ -1,0 +1,101 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function sesion() { return request.auth != null; }
+    function esAdmin() {
+      return sesion()
+        && exists(/databases/$(database)/documents/usuarios/$(request.auth.uid))
+        && get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data.rol == 'admin';
+    }
+    function esDueno() { return sesion() && resource.data.id_usuario == request.auth.uid; }
+    function creaPropio() { return sesion() && request.resource.data.id_usuario == request.auth.uid; }
+
+    // Catálogo: lo ve cualquiera; solo el admin lo modifica.
+    // Un cliente solo puede BAJAR el stock (al comprar), nunca subirlo ni cambiar precios.
+    match /productos/{id} {
+      allow read: if true;
+      allow create, delete: if esAdmin();
+      allow update: if esAdmin() || (sesion()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stock'])
+        && request.resource.data.stock is int
+        && request.resource.data.stock >= 0
+        && request.resource.data.stock < resource.data.stock);
+    }
+
+    match /categorias/{id} { allow read: if true; allow write: if esAdmin(); }
+    // Cupones: cualquiera los lee; el cliente solo puede sumar 1 al contador "usos"
+    // al comprar, respetando el límite. Todo lo demás lo cambia el admin.
+    match /cupones/{id} {
+      allow read: if true;
+      allow create, delete: if esAdmin();
+      allow update: if esAdmin() || (sesion()
+        && resource.data.activo == true
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['usos'])
+        && request.resource.data.usos == resource.data.get('usos', 0) + 1
+        && (resource.data.get('limite_usos', null) == null
+            || request.resource.data.usos <= resource.data.limite_usos));
+
+      // Registro de "un uso por cliente": el documento se llama como el uid
+      match /usos/{uid} {
+        allow read: if sesion() && (request.auth.uid == uid || esAdmin());
+        allow create: if sesion() && request.auth.uid == uid;
+        allow update, delete: if esAdmin();
+      }
+    }
+
+    // Cada usuario ve y edita solo su perfil y no puede darse rol de admin.
+    match /usuarios/{uid} {
+      allow read: if sesion() && (request.auth.uid == uid || esAdmin());
+      allow create: if sesion() && request.auth.uid == uid && request.resource.data.rol == 'cliente';
+      allow update: if esAdmin() || (sesion() && request.auth.uid == uid
+                      && request.resource.data.rol == resource.data.rol);
+      allow delete: if esAdmin();
+    }
+
+    // Pedidos y sus partes: el cliente crea y ve los suyos; solo el admin los modifica.
+    match /pedidos/{id} {
+      allow read: if esDueno() || esAdmin();
+      allow create: if creaPropio() && request.resource.data.estado == 'pagado';
+      allow update, delete: if esAdmin();
+    }
+    match /detalle_pedido/{id} {
+      allow read: if esDueno() || esAdmin();
+      allow create: if creaPropio();
+      allow update, delete: if esAdmin();
+    }
+    match /envios/{id} {
+      allow read: if esDueno() || esAdmin();
+      allow create: if creaPropio();
+      allow update, delete: if esAdmin();
+    }
+
+    // Solicitudes de cancelación y devolución: el cliente crea y ve las suyas;
+    // solo el admin las aprueba, rechaza o completa.
+    match /devoluciones/{id} {
+      allow read: if esDueno() || esAdmin();
+      allow create: if creaPropio()
+        && request.resource.data.estado == 'solicitada'
+        && request.resource.data.tipo in ['cancelacion', 'devolucion'];
+      allow update, delete: if esAdmin();
+    }
+
+    // Bitácora de auditoría: solo el admin la crea y la lee; nadie la modifica.
+    match /audit_logs/{id} {
+      allow read, create: if esAdmin();
+      allow update, delete: if false;
+    }
+
+    // Bitácora de inventario: nadie la edita ni la borra.
+    match /movimientos_inventario/{id} {
+      allow read: if esAdmin();
+      allow create: if creaPropio() || esAdmin();
+      allow update, delete: if false;
+    }
+
+    // Cualquier otra colección: solo administrador.
+    match /{document=**} {
+      allow read, write: if esAdmin();
+    }
+  }
+}
