@@ -65,8 +65,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // v2: los ids ahora son los de Firestore (prod_001, prod_002...)
     localStorage.removeItem('vv_cart');
     localStorage.removeItem('vv_wishlist');
-    let cart = JSON.parse(localStorage.getItem('vv_cart_v2')) || [];
-    let wishlist = JSON.parse(localStorage.getItem('vv_wishlist_v2')) || [];
+    // --- COOKIES Y ALMACENAMIENTO LOCAL ---
+    // Necesarias (siempre): sesión de Firebase, aceptación de términos y la propia elección de cookies.
+    // De preferencias (opcionales): recordar carrito y favoritos entre visitas.
+    const COOKIES_VERSION = '1.0';
+    function leerCookies() {
+        try { return JSON.parse(localStorage.getItem('vv_cookies')); } catch (e) { return null; }
+    }
+    let cookiesElegidas = leerCookies();
+    const recordarPreferencias = () => !!(cookiesElegidas && cookiesElegidas.preferencias);
+
+    let cart = recordarPreferencias() ? (JSON.parse(localStorage.getItem('vv_cart_v2')) || []) : [];
+    let wishlist = recordarPreferencias() ? (JSON.parse(localStorage.getItem('vv_wishlist_v2')) || []) : [];
     // Los usuarios ahora viven en Firebase Authentication (contraseñas con hash).
     // Se borran restos de la versión anterior que guardaba contraseñas en texto plano.
     localStorage.removeItem('vv_users');
@@ -323,7 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function saveCart() {
-        localStorage.setItem('vv_cart_v2', JSON.stringify(cart));
+        if (recordarPreferencias()) localStorage.setItem('vv_cart_v2', JSON.stringify(cart));
     }
 
     function updateCartUI() {
@@ -431,7 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             wishlist.push(id);
         }
-        localStorage.setItem('vv_wishlist_v2', JSON.stringify(wishlist));
+        if (recordarPreferencias()) localStorage.setItem('vv_wishlist_v2', JSON.stringify(wishlist));
         updateWishlistUI();
         renderProducts();
     }
@@ -1296,6 +1306,33 @@ document.addEventListener('DOMContentLoaded', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     }
+
+    // --- AVISO DE COOKIES ---
+    const cookieBanner = document.getElementById('cookie-banner');
+
+    function guardarCookies(preferencias) {
+        cookiesElegidas = { version: COOKIES_VERSION, necesarias: true, preferencias, fecha: new Date().toISOString() };
+        localStorage.setItem('vv_cookies', JSON.stringify(cookiesElegidas));
+        if (preferencias) {
+            localStorage.setItem('vv_cart_v2', JSON.stringify(cart));
+            localStorage.setItem('vv_wishlist_v2', JSON.stringify(wishlist));
+        } else {
+            // Al rechazar se borra lo que ya estuviera guardado
+            localStorage.removeItem('vv_cart_v2');
+            localStorage.removeItem('vv_wishlist_v2');
+        }
+        if (cookieBanner) cookieBanner.style.display = 'none';
+    }
+
+    if (cookieBanner && (!cookiesElegidas || cookiesElegidas.version !== COOKIES_VERSION)) {
+        cookieBanner.style.display = 'flex';
+    }
+    const btnCookiesAceptar = document.getElementById('cookies-aceptar');
+    const btnCookiesRechazar = document.getElementById('cookies-rechazar');
+    if (btnCookiesAceptar) btnCookiesAceptar.addEventListener('click', () => guardarCookies(true));
+    if (btnCookiesRechazar) btnCookiesRechazar.addEventListener('click', () => guardarCookies(false));
+    const linkCookies = document.getElementById('link-preferencias-cookies');
+    if (linkCookies) linkCookies.addEventListener('click', () => { if (cookieBanner) cookieBanner.style.display = 'flex'; });
 
     // --- AVISO INICIAL DE TÉRMINOS Y PRIVACIDAD ---
     const TERMS_VERSION = '1.0';

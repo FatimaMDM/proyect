@@ -182,6 +182,7 @@
                 <a href="politicas.html#contacto">Atención al Cliente</a>
                 <a href="politicas.html#proveedor">Datos del Proveedor</a>
                 <a href="politicas.html#facturacion">Facturación</a>
+                <a href="javascript:void(0)" id="link-preferencias-cookies">Preferencias de cookies</a>
             </div>
         </div>
     </footer>
@@ -404,6 +405,21 @@
         </div>
     </div>
 
+    <!-- AVISO DE COOKIES (barra inferior, por encima de las ventanas) -->
+    <div id="cookie-banner" role="region" aria-label="Aviso de cookies"
+         style="display:none; position:fixed; left:16px; right:16px; bottom:16px; z-index:3000; max-width:760px; margin:0 auto;
+                background:#ffffff; border-radius:15px; box-shadow:0 6px 30px rgba(0,0,0,0.18); padding:16px 20px;
+                gap:16px; align-items:center; flex-wrap:wrap; font-family:'Poppins', sans-serif;">
+        <p style="flex:1 1 320px; font-size:13px; color:#303030; margin:0; line-height:1.5;">
+            🍪 Usamos cookies y almacenamiento del navegador <strong>necesarios</strong> para tu sesión y tu aceptación de términos, y otros <strong>opcionales</strong> para recordar tu carrito y favoritos entre visitas. No usamos cookies de publicidad.
+            <a href="politicas.html#cookies" target="_blank" style="color:#3A5A40; font-weight:600;">Política de cookies</a>
+        </p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" id="cookies-rechazar" style="border:2px solid #3A5A40; background:#fff; color:#3A5A40; border-radius:25px; padding:9px 20px; font-weight:600; font-family:inherit; cursor:pointer;">Rechazar opcionales</button>
+            <button type="button" id="cookies-aceptar" style="border:2px solid #3A5A40; background:#3A5A40; color:#fff; border-radius:25px; padding:9px 20px; font-weight:600; font-family:inherit; cursor:pointer;">Aceptar todas</button>
+        </div>
+    </div>
+
     <!-- MODAL AVISO INICIAL: TÉRMINOS Y PRIVACIDAD -->
     <div class="modal-overlay" id="consent-modal" role="dialog" aria-modal="true" aria-labelledby="consent-title">
         <div class="modal-card" style="max-width:480px; text-align:center;">
@@ -440,6 +456,6 @@
     </div>
 
     <!-- Carga con parámetro de versión para forzar la actualización de caché -->
-    <script src="script.js?v=2.2.0"></script>
+    <script src="script.js?v=2.3.0"></script>
 </body>
 </html>
