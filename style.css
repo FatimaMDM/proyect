@@ -825,9 +825,9 @@ button.btn-1, .btn-secondary {
     to { transform: rotate(360deg); }
 }
 
-/* ==========================================================
+/*
    AJUSTES RESPONSIVOS DEFINITIVOS (HEADER, BUSCADOR Y SESIÓN)
-   ========================================================== */
+ */
 
 /* 1. CONFIGURACIÓN EN ESCRITORIO (Pantallas grandes) */
 #mobile-login-item {
@@ -1028,9 +1028,8 @@ button.btn-1, .btn-secondary {
 }
 
 
-/* =========================================================
-   ACCESIBILIDAD (WCAG 2.2): contraste y foco visible
-   ========================================================= */
+/*
+   ACCESIBILIDAD (WCAG 2.2): contraste y foco visible*/
 .badge-offer { background-color: #c0392b; }
 .stock-tag { color: #1e7e45; }
 .old-price { color: #6b6b6b; }
@@ -1056,3 +1055,6 @@ select:focus-visible, textarea:focus-visible, label:focus-visible {
     .header-txt h1, .header-txt p { color: #ffffff; }
     .header-txt .btn-1 { background-color: #ffffff; color: #3A5A40; }
 }
+
+/* Título solo para lectores de pantalla (orden de encabezados h1 > h2 > h3) */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
