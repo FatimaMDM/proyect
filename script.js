@@ -57,13 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function cargarProductos() {
         if (productListContainer) {
-            productListContainer.innerHTML = '<p style="width:100%; text-align:center; color:#777; padding:20px;">Cargando productos...</p>';
+            productListContainer.innerHTML = '<p style="width:100%; text-align:center; color:#666; padding:20px;">Cargando productos...</p>';
         }
         try {
             const snap = await db.collection('productos').where('estado', '==', 'activo').get();
             productsDB = snap.docs.map(docAProducto).sort((a, b) => a.id.localeCompare(b.id));
             if (productsDB.length === 0 && productListContainer) {
-                productListContainer.innerHTML = '<p style="width:100%; text-align:center; color:#777; padding:20px;">Aún no hay productos en la base de datos. El administrador debe cargarlos desde cargar-datos.html.</p>';
+                productListContainer.innerHTML = '<p style="width:100%; text-align:center; color:#666; padding:20px;">Aún no hay productos en la base de datos. El administrador debe cargarlos desde cargar-datos.html.</p>';
                 return;
             }
             sincronizarCarrito();
@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
         productListContainer.innerHTML = '';
 
         if (filtered.length === 0) {
-            productListContainer.innerHTML = '<p style="width:100%; text-align:center; color:#777; grid-column: 1 / -1; padding: 20px;">No se encontraron plantas que coincidan con tu búsqueda.</p>';
+            productListContainer.innerHTML = '<p style="width:100%; text-align:center; color:#666; grid-column: 1 / -1; padding: 20px;">No se encontraron plantas que coincidan con tu búsqueda.</p>';
             return;
         }
 
@@ -252,13 +252,13 @@ document.addEventListener('DOMContentLoaded', () => {
             card.innerHTML = `
                 ${p.discount ? `<span class="badge-offer">${p.discount}</span>` : ''}
                 <div class="product-top-actions">
-                    <button class="icon-btn wishlist-toggle" data-id="${p.id}">${isWish ? '❤️' : '🤍'}</button>
-                    <button class="icon-btn quickview-btn" data-id="${p.id}">🔍</button>
+                    <button class="icon-btn wishlist-toggle" data-id="${p.id}" aria-label="${isWish ? 'Quitar de favoritos' : 'Agregar a favoritos'}">${isWish ? '❤️' : '🤍'}</button>
+                    <button class="icon-btn quickview-btn" data-id="${p.id}" aria-label="Ver detalle">🔍</button>
                 </div>
                 <img src="${p.img}" alt="${p.name}">
                 <h3>${p.name}</h3>
                 <p>${p.desc}</p>
-                <p style="font-size:12px; color:#888;">${p.spec}</p>
+                <p style="font-size:12px; color:#666;">${p.spec}</p>
                 <div class="stock-tag ${p.stock === 0 ? 'out-stock' : ''}">
                     ${p.stock > 0 ? `Stock disponible: ${p.stock}` : 'Agotado'}
                 </div>
@@ -360,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let totalCount = 0;
 
         if (cart.length === 0) {
-            cartItemsContainer.innerHTML = '<p style="text-align:center; color:#777; margin-top:20px;">El carrito está vacío</p>';
+            cartItemsContainer.innerHTML = '<p style="text-align:center; color:#666; margin-top:20px;">El carrito está vacío</p>';
         } else {
             cart.forEach((item, index) => {
                 subtotal += item.price * item.quantity;
@@ -470,7 +470,7 @@ document.addEventListener('DOMContentLoaded', () => {
         wishlistItemsContainer.innerHTML = '';
 
         if (wishlist.length === 0) {
-            wishlistItemsContainer.innerHTML = '<p style="text-align:center; color:#777; margin-top:20px;">No tienes favoritos guardados aún.</p>';
+            wishlistItemsContainer.innerHTML = '<p style="text-align:center; color:#666; margin-top:20px;">No tienes favoritos guardados aún.</p>';
             return;
         }
 
@@ -528,7 +528,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div style="flex:1; min-width:200px;">
                     <h3 style="font-size:22px; color:#303030;">${p.name}</h3>
                     <p style="color:#555; margin:10px 0;">${p.desc}</p>
-                    <p style="font-size:12px; color:#888;"><strong>Especificación:</strong> ${p.spec}</p>
+                    <p style="font-size:12px; color:#666;"><strong>Especificación:</strong> ${p.spec}</p>
                     <p style="font-size:18px; color:#3A5A40; font-weight:700; margin:10px 0;">$${p.price}.00</p>
                     <button type="button" class="btn-1" id="qv-add-btn" ${p.stock === 0 ? 'disabled' : ''}>
                         ${p.stock > 0 ? 'Agregar al Carrito' : 'Sin Stock'}
@@ -1152,7 +1152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function abrirMisPedidos() {
         if (!auth.currentUser || !ordersModal) return;
         ordersModal.style.display = 'flex';
-        ordersList.innerHTML = '<p style="color:#777;">Cargando pedidos...</p>';
+        ordersList.innerHTML = '<p style="color:#666;">Cargando pedidos...</p>';
         const uid = auth.currentUser.uid;
         try {
             const [sp, sd, ss, se] = await Promise.all([
@@ -1178,7 +1178,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function pintarMisPedidos() {
         if (!misDatos.pedidos.length) {
-            ordersList.innerHTML = '<p style="color:#777;">Todavía no tienes pedidos.</p>';
+            ordersList.innerHTML = '<p style="color:#666;">Todavía no tienes pedidos.</p>';
             return;
         }
         ordersList.innerHTML = misDatos.pedidos.map(p => {
@@ -1205,7 +1205,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (dias <= PLAZO_DEVOLUCION_DIAS) {
                     acciones += `<button type="button" class="btn-auth-nav" data-solicitar="devolucion" data-pid="${escHTML(p.id)}" style="margin-top:8px;">Solicitar devolución</button>`;
                 } else {
-                    acciones += `<p style="font-size:12px; color:#777; margin-top:6px;">El plazo de devolución terminó. Para garantías escribe a atención al cliente.</p>`;
+                    acciones += `<p style="font-size:12px; color:#666; margin-top:6px;">El plazo de devolución terminó. Para garantías escribe a atención al cliente.</p>`;
                 }
             }
             const guia = envio && envio.guia ? `<br>Envío: ${escHTML(envio.paqueteria)} · Guía ${escHTML(envio.guia)}` : '';
@@ -1412,4 +1412,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target === ordersModal) ordersModal.style.display = 'none';
         if (e.target === returnModal) returnModal.style.display = 'none';
     });
+});
+
+// ACCESIBILIDAD: los elementos con role="button" (carrito y
+// favoritos del encabezado) también se abren con Enter o Espacio
+document.addEventListener('keydown', (e) => {
+    const el = e.target;
+    if (el && el.getAttribute && el.getAttribute('role') === 'button' && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        el.click();
+    }
 });

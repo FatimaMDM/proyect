@@ -1026,3 +1026,33 @@ button.btn-1, .btn-secondary {
         font-size: 12px;
     }
 }
+
+
+/* =========================================================
+   ACCESIBILIDAD (WCAG 2.2): contraste y foco visible
+   ========================================================= */
+.badge-offer { background-color: #c0392b; }
+.stock-tag { color: #1e7e45; }
+.old-price { color: #6b6b6b; }
+.out-stock, .error-msg { color: #c0392b; }
+.form-group input.input-error { border-color: #c0392b; }
+.tab-btn, .step-badge { color: #666666; }
+.cuenta-saludo { color: #666666; }
+a:focus-visible, button:focus-visible, input:focus-visible,
+select:focus-visible, textarea:focus-visible, label:focus-visible {
+    outline: 3px solid #3A5A40;
+    outline-offset: 2px;
+}
+/* Botón de cuenta legible aunque quede sobre la forma verde */
+.btn-auth-nav { background-color: #ffffff; }
+/* En tableta y celular el texto principal queda sobre las formas de fondo:
+   se le pone una tarjeta verde para que siempre se lea */
+@media (max-width: 991px) {
+    .header-txt {
+        background: rgba(58, 90, 64, 0.94);
+        padding: 28px 20px;
+        border-radius: 20px;
+    }
+    .header-txt h1, .header-txt p { color: #ffffff; }
+    .header-txt .btn-1 { background-color: #ffffff; color: #3A5A40; }
+}

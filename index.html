@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verde Vida - Tienda de Plantas</title>
-    <link rel="stylesheet" href="style.css?v=2.2">
+    <link rel="stylesheet" href="style.css?v=2.3">
 </head>
 <body>
     <!-- Cargar librerías de Firebase -->
@@ -22,7 +22,7 @@
             </a>            
             <input type="checkbox" id="menu" />
             <label for="menu">
-                <img src="images/menu.png" class="menu-icono" alt="">
+                <img src="images/menu.png" class="menu-icono" alt="Abrir menú">
             </label>
             <nav class="navbar">
                 <ul>
@@ -38,13 +38,13 @@
 
             <!-- Acciones de Búsqueda, Wishlist, Carrito y Usuario -->
             <div class="header-actions">
-                <input type="text" id="search-input" placeholder="Buscar planta..." class="search-input">
+                <input type="text" id="search-input" placeholder="Buscar planta..." class="search-input" aria-label="Buscar planta">
                 
-                <div class="wishlist-btn" id="wishlist-icon" title="Favoritos">
+                <div class="wishlist-btn" id="wishlist-icon" title="Favoritos" role="button" tabindex="0" aria-label="Ver favoritos">
                     ❤️ <span id="wishlist-count">0</span>
                 </div>
 
-                <div class="cart-btn" id="cart-icon" title="Ver Carrito">
+                <div class="cart-btn" id="cart-icon" title="Ver Carrito" role="button" tabindex="0" aria-label="Ver carrito">
                     🛒 <span id="cart-count">0</span>
                 </div>
 
@@ -56,7 +56,7 @@
 
         <div class="header-content container">
             <div class="header-txt">
-                <h1>LLena tus espacios de vida y naturaleza</h1>
+                <h1>Llena tus espacios de vida y naturaleza</h1>
                 <p>
                     Descubre nuestra colección de plantas de interior, 
                     flores frescas y accesorios para transformar tu hogar en un oasis natural.
@@ -80,13 +80,13 @@
             <img src="images/gps.svg" alt="">
             <h3>Dirección</h3>
             <p>Calle Reforma, Infonavit, #5935</p>
-            <p>88275 Nuevo Laredo, Tamulipas, México</p>
+            <p>88275 Nuevo Laredo, Tamaulipas, México</p>
         </div>
 
         <div class="info-1">
             <img src="images/phone.svg" alt="">
             <h3>Teléfono</h3>
-            <p>8671170339</p>
+            <p>867 000 0000 (ficticio)</p>
         </div>
     </section>
 
@@ -456,6 +456,6 @@
     </div>
 
     <!-- Carga con parámetro de versión para forzar la actualización de caché -->
-    <script src="script.js?v=2.5.0"></script>
+    <script src="script.js?v=2.5.1"></script>
 </body>
 </html>
