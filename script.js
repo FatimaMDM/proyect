@@ -201,6 +201,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     estado: 'activo',
                     fecha_registro: firebase.firestore.FieldValue.serverTimestamp()
                 });
+            } else if (!snap.data().nombre && (nombre || user.displayName)) {
+                // Al registrarse, el perfil a veces se crea antes de guardar el nombre:
+                // si quedó vacío, se completa ahora.
+                await ref.update({ nombre: nombre || user.displayName });
             }
         } catch (err) {
             console.error('No se pudo guardar el perfil:', err);
@@ -1416,6 +1420,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ACCESIBILIDAD: los elementos con role="button" (carrito y
 // favoritos del encabezado) también se abren con Enter o Espacio
+
 document.addEventListener('keydown', (e) => {
     const el = e.target;
     if (el && el.getAttribute && el.getAttribute('role') === 'button' && (e.key === 'Enter' || e.key === ' ')) {
