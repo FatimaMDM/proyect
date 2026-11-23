@@ -1418,13 +1418,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+
 // ACCESIBILIDAD: los elementos con role="button" (carrito y
 // favoritos del encabezado) también se abren con Enter o Espacio
-
 document.addEventListener('keydown', (e) => {
     const el = e.target;
     if (el && el.getAttribute && el.getAttribute('role') === 'button' && (e.key === 'Enter' || e.key === ' ')) {
         e.preventDefault();
         el.click();
     }
+});
+
+// ACCESIBILIDAD: la tecla Esc cierra la ventana que esté abierta
+// (el aviso de consentimiento no se cierra así porque requiere una respuesta)
+document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    ['cart-modal', 'wishlist-modal', 'quickview-modal', 'auth-modal', 'checkout-modal',
+     'orders-modal', 'return-modal', 'thankyou-modal'].forEach(id => {
+        const m = document.getElementById(id);
+        if (m && m.style.display && m.style.display !== 'none') m.style.display = 'none';
+    });
 });
